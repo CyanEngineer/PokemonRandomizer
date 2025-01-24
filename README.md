@@ -39,6 +39,8 @@ Based on
   - Paldea -> Paldean
   - Gmax -> Gigantamax
   - X Shaymin -> X Forme Shaymin
+  - Paldea X Breed Tauros -> X Breed Paldean Tauros
 - Edge cases
   - Ignore Totem forms?
   - Type-null -> Type: Null
+  - There are forms with no artwork at all (e.g. Miraidon Low-Power)

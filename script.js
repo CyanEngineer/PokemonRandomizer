@@ -73,11 +73,11 @@ function generate() {
 
     const pokemonForm = selectForm(pokemon);
 
-    setName(pokemonForm, pokemon["name"]);
-
     const sprite = selectSprite(pokemonForm);
 
     setSprite(sprite);
+
+    setName(pokemon["id"], pokemonForm, pokemon["name"]);
 }
 
 function randInt(max) {
@@ -91,7 +91,10 @@ function selectForm(pokemon) {
     return pokemonForms[formIdx];
 }
 
-function setName(pokemonForm, pokemonName) {
+function setName(dexNumber, pokemonForm, pokemonName) {
+    const dexDigits = Math.floor(Math.log10(json.length) + 1);
+    const dexString = dexNumber.toString().padStart(dexDigits, "0");
+
     var fullName;
 
     const pokemonNameParts = pokemonName.split("-"); // In case of two-word names
@@ -118,7 +121,7 @@ function setName(pokemonForm, pokemonName) {
         }
     }
 
-    pokemon_name.innerHTML = fullName;
+    pokemon_name.innerHTML = "#" + dexString + " " + fullName;
 }
 
 function capitalizeFirstLetter(str) {
