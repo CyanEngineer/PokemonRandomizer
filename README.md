@@ -25,3 +25,20 @@ Based on
 
 ### Evolution tree
 - Bulbapedia-style table of the evolution tree of current pokemon (selectable)
+
+### Other todos
+- Ignore Scatterbug and Spewpa forms
+- Burmy, Cherrim, Deerling, Sawsbuck, Vivilion and Flabebe forms are further inside the JSON (perhaps cosmetic forms are placed in there??)
+- Same with Genesect and Xerneas (but I don't think PokéAPI has the different colors (the difference is minor anyways))
+- Same with Shellos and Gastrodon (they are missing "sea" too)
+- Same with Arceus and Silvally, and the types are only in pokemon_v2_pokemonformtypes (except for normal)
+- Correct some form names
+  - Alola -> Alolan
+  - Galar -> Galarian
+  - Hisui -> Hisuian
+  - Paldea -> Paldean
+  - Gmax -> Gigantamax
+  - X Shaymin -> X Forme Shaymin
+- Edge cases
+  - Ignore Totem forms?
+  - Type-null -> Type: Null
