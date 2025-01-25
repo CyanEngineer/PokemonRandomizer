@@ -168,9 +168,18 @@ function setAlternateForms(pokemon, formIdx) {
     for (const form in pokemonForms) {
         const form_img = document.createElement("img");
         form_img.classList.add("form_img");
-        if ((pokemonForms.length > 1) && (form == formIdx)) {
-            form_img.classList.add("current_form");
+        
+        if (pokemonForms.length > 1) {
+            form_img.onclick = () => setPokemon(pokemon, form);
+            form_img.classList.add("clickable");
+            
+            if (form == formIdx) {
+                form_img.classList.add("current_form");
+            }
         }
+
+        
+
         form_img.src = selectSprite(pokemonForms[form]);
         forms_container.appendChild(form_img);
     }

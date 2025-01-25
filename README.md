@@ -47,12 +47,14 @@ Based on
 - Edge cases
   - Ignore Scatterbug and Spewpa forms
   - Zygarde add "%"
+  - Nidoran use gender symbols?
   - Ignore forms:
-    - Totem
-    - Gourgeist size
-    - Scatterbug/Spewpa forms
-    - Koraidon builds
-    - Miraidon modes
+    - Totem Pokemon
+    - Mothim
+    - Gourgeist
+    - Scatterbug/Spewpa 
+    - Koraidon
+    - Miraidon
   - Type-null -> Type: Null
   - Stellar type??
 
