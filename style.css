@@ -1,0 +1,39 @@
+body {
+    display: flex;
+    flex-direction: row;
+    margin: 0;
+    text-align: center;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+}
+
+aside {
+    display: flex;
+    flex-direction: column;
+    width: 20vw;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+.form_img {
+    max-width: auto;
+    height: auto;
+}
+
+.current_form {
+    border: solid cyan;
+    border-radius: 10px;
+}
+
+.forms_container {
+    display: flex;
+    flex-direction: row;
+    height:6rem;
+    overflow: scroll;
+}

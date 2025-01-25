@@ -1,13 +1,27 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Pokémon Randomizer</title>
+        <link rel="stylesheet" href="style.css" type="text/css" >
+    </head>
+
     <body>
-        <div class="column">
-            <img id="pokemon_img" class="pokemon_img">
-            <h2 id="pokemon_name"></h2>
+        <main>
             <button class="generage_button" onclick="generate()">
                 Generate!
             </button>
-        </div>
+            <div>
+                <img id="pokemon_img" class="pokemon_img">
+            </div>
+            <h2 id="pokemon_name"></h2>
+            <div id="forms_container" class="forms_container">
+                
+            </div>
+        </main>
+        <aside>
+            <h2>Filter stuff</h2>
+        </aside>
     </body>
 
     <script src="script.js"></script>

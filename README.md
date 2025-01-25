@@ -14,6 +14,7 @@ Based on
 ### Form selection
 - If forms are enabled, display a random one of them.
 - Also show a list of all the alternative forms to choose from (selectable)
+- Try to see if I can postpone displaying until all images are loaded (form border too)
 
 ### Sprite selection
 - Choose a sprite to display out of the sprites available in PokéAPI
@@ -25,9 +26,12 @@ Based on
 
 ### Evolution tree
 - Bulbapedia-style table of the evolution tree of current pokemon (selectable)
+- How should I deal with regional-only evolutions? Maybe only include in the relevant form?
+- Check ordering (baby pokemon)
+
+### Linked list (history)?
 
 ### Other todos
-- Ignore Scatterbug and Spewpa forms
 - Burmy, Cherrim, Deerling, Sawsbuck, Vivilion and Flabebe forms are further inside the JSON (perhaps cosmetic forms are placed in there??)
 - Same with Genesect and Xerneas (but I don't think PokéAPI has the different colors (the difference is minor anyways))
 - Same with Shellos and Gastrodon (they are missing "sea" too)
@@ -41,6 +45,16 @@ Based on
   - X Shaymin -> X Forme Shaymin
   - Paldea X Breed Tauros -> X Breed Paldean Tauros
 - Edge cases
-  - Ignore Totem forms?
+  - Ignore Scatterbug and Spewpa forms
+  - Zygarde add "%"
+  - Ignore forms:
+    - Totem
+    - Gourgeist size
+    - Scatterbug/Spewpa forms
+    - Koraidon builds
+    - Miraidon modes
   - Type-null -> Type: Null
-  - There are forms with no artwork at all (e.g. Miraidon Low-Power)
+  - Stellar type??
+
+### Stuff I should report
+- Frillish + Jellicent have forms that shouldn't be there (probably for females)
