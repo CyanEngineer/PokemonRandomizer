@@ -42,21 +42,29 @@ Based on
   - Hisui -> Hisuian
   - Paldea -> Paldean
   - Gmax -> Gigantamax
-  - X Shaymin -> X Forme Shaymin
-  - Paldea X Breed Tauros -> X Breed Paldean Tauros
 - Edge cases
-  - Ignore Scatterbug and Spewpa forms
   - Zygarde add "%"
   - Nidoran use gender symbols?
   - Ignore forms:
     - Totem Pokemon
     - Mothim
-    - Gourgeist
-    - Scatterbug/Spewpa 
-    - Koraidon
-    - Miraidon
+    - Pompkaboo + Gourgeist
+    - Scatterbug + Spewpa 
+    - Koraidon + Miraidon
+    - Toxtricity 2nd Gmax form
   - Type-null -> Type: Null
+  - X Shaymin -> X Forme Shaymin
+  - Paldea X Breed Tauros -> X Breed Paldean Tauros
+  - Arceus + Silvally use form name as type
   - Stellar type??
 
 ### Stuff I should report
 - Frillish + Jellicent have forms that shouldn't be there (probably for females)
+- Arceus and Silvally are the only Pokemon using the pokemon_v2_pokemonformtypes. Their Normal forms do not, though
+- Ogerpon form sprites are misaligned
+- Missing form sprites
+  - Sawsbuck
+  - Pichu
+  - Floette colors
+  - Cherrim
+  - Unown

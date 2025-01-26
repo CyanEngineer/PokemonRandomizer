@@ -92,7 +92,7 @@ function randInt(max) {
     return Math.floor(Math.random() * max);
 }
 
-function setPokemon(pokemon, formIdx=-1) {
+function setPokemon(pokemon, formIdx=-1, variantIdx=-1) {
     forms_container.innerHTML = ""
 
     const pokemonForms = pokemon["pokemon_v2_pokemons"];
@@ -101,13 +101,19 @@ function setPokemon(pokemon, formIdx=-1) {
     }
     const pokemonForm = pokemonForms[formIdx];
 
-    const sprite = selectSprite(pokemonForm);
+    const pokemonVariants = pokemonForm["pokemon_v2_pokemonforms"];
+    if (variantIdx == -1) {
+        variantIdx = selectVariantIdx(pokemonVariants);
+    }
+    const pokemonVariant = pokemonVariants[variantIdx];
+
+    const sprite = selectSprite(pokemonVariant);
 
     setSprite(sprite);
 
-    setName(pokemon["id"], pokemonForm, pokemon["name"]);
+    setName(pokemon["id"], pokemonVariant, pokemon["name"]);
 
-    setAlternateForms(pokemon, formIdx);
+    setAlternateForms(pokemon, formIdx, variantIdx);
 }
 
 function selectFormIdx(pokemonForms) {
@@ -116,21 +122,27 @@ function selectFormIdx(pokemonForms) {
     return formIdx;
 }
 
+function selectVariantIdx(pokemonVariants) {
+    //TODO: Implement selection filtering
+    const variantIdx = randInt(pokemonVariants.length);
+    return variantIdx;
+}
+
 function capitalizeFirstLetter(str) {
     return str.substring(0,1).toUpperCase() + str.substring(1);
 }
 
-function selectSprite(pokemonForm) {
+function selectSprite(pokemonVariant) {
     //TODO: Implement selection logic
     //const spriteSource = 
-    return pokemonForm["pokemon_v2_pokemonforms"][0]["pokemon_v2_pokemon"]["pokemon_v2_pokemonsprites"][0]["sprites"]["other"]["official-artwork"]["front_default"];
+    return pokemonVariant["pokemon_v2_pokemon"]["pokemon_v2_pokemonsprites"][0]["sprites"]["other"]["official-artwork"]["front_default"];
 }
 
 function setSprite(sprite) {
     pokemon_img.src = sprite;
 }
 
-function setName(dexNumber, pokemonForm, pokemonName) {
+function setName(dexNumber, pokemonVariant, pokemonName) {
     const dexDigits = Math.floor(Math.log10(json.length) + 1);
     const dexString = dexNumber.toString().padStart(dexDigits, "0");
 
@@ -142,7 +154,7 @@ function setName(dexNumber, pokemonForm, pokemonName) {
     }
     const pokemonPrettyName = pokemonNameParts.join(" ");
 
-    const formNameParts = pokemonForm["pokemon_v2_pokemonforms"][0]["form_name"].split("-");
+    const formNameParts = pokemonVariant["form_name"].split("-");
     for (let i = 0; i < formNameParts.length; i++) {
         formNameParts[i] = capitalizeFirstLetter(formNameParts[i]);
     }
@@ -163,24 +175,26 @@ function setName(dexNumber, pokemonForm, pokemonName) {
     pokemon_name.innerHTML = "#" + dexString + " " + fullName;
 }
 
-function setAlternateForms(pokemon, formIdx) {
+function setAlternateForms(pokemon, formIdx, variantIdx) {
     const pokemonForms = pokemon["pokemon_v2_pokemons"];
     for (const form in pokemonForms) {
-        const form_img = document.createElement("img");
-        form_img.classList.add("form_img");
-        
-        if (pokemonForms.length > 1) {
-            form_img.onclick = () => setPokemon(pokemon, form);
-            form_img.classList.add("clickable");
-            
-            if (form == formIdx) {
-                form_img.classList.add("current_form");
+
+        const pokemonVariants = pokemonForms[form]["pokemon_v2_pokemonforms"];
+        for (const variant in pokemonVariants) {
+            const form_img = document.createElement("img");
+            form_img.classList.add("form_img")
+
+            if ((pokemonForms.length > 1) || (pokemonVariants.length > 1)) {
+                if ((form == formIdx) && (variant == variantIdx)) {
+                    form_img.classList.add("current_form");
+                } else {
+                    form_img.onclick = () => setPokemon(pokemon, form, variant);
+                    form_img.classList.add("clickable");
+                }
             }
+
+            form_img.src = selectSprite(pokemonForms[form]["pokemon_v2_pokemonforms"][variant]);
+            forms_container.appendChild(form_img);
         }
-
-        
-
-        form_img.src = selectSprite(pokemonForms[form]);
-        forms_container.appendChild(form_img);
     }
 }
