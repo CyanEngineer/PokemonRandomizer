@@ -12,8 +12,8 @@ Based on
 - Etc.
 
 ### Form selection
-- If forms are enabled, display a random one of them.
-- Also show a list of all the alternative forms to choose from (selectable)
+- ~~If forms are enabled, display a random one of them.~~
+- ~~Also show a list of all the alternative forms to choose from (selectable)~~
 - Try to see if I can postpone displaying until all images are loaded (form border too)
 
 ### Sprite selection
@@ -52,6 +52,7 @@ Based on
     - Scatterbug + Spewpa 
     - Koraidon + Miraidon
     - Toxtricity 2nd Gmax form
+    - Genesect
   - Type-null -> Type: Null
   - X Shaymin -> X Forme Shaymin
   - Paldea X Breed Tauros -> X Breed Paldean Tauros

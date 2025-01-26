@@ -3,6 +3,7 @@ var types;
 var selectionPool;
 const pokemon_img = document.getElementById("pokemon_img");
 const pokemon_name = document.getElementById("pokemon_name");
+const types_container = document.getElementById("types_container");
 const forms_container = document.getElementById("forms_container");
 // Species > variety > form > gender > shiny > artworks
 
@@ -10,18 +11,16 @@ setup();
 
 async function setup() {
 
-    /* Figure out what I'm gonna do with types...
-    fetch("https://pokeapi.co/api/v2/type?limit=100")
+    fetch("types.json")
         .then(async response => {
             if (!response.ok) {
                 console.log(response);
                 //TODO: Handle
             } else {
                 const res = await response.json();
-                console.log(res["results"]) //TODO: Delete this
+                types = res;
             }
         });
-    */
 
     await fetch("https://beta.pokeapi.co/graphql/v1beta", {
         method: 'POST',
@@ -93,11 +92,12 @@ function randInt(max) {
 }
 
 function setPokemon(pokemon, formIdx=-1, variantIdx=-1) {
-    forms_container.innerHTML = ""
+    types_container.innerHTML = "";
+    forms_container.innerHTML = "";
 
     const pokemonForms = pokemon["pokemon_v2_pokemons"];
     if (formIdx == -1) {
-        formIdx = selectFormIdx(pokemonForms)
+        formIdx = selectFormIdx(pokemonForms);
     }
     const pokemonForm = pokemonForms[formIdx];
 
@@ -112,6 +112,8 @@ function setPokemon(pokemon, formIdx=-1, variantIdx=-1) {
     setSprite(sprite);
 
     setName(pokemon["id"], pokemonVariant, pokemon["name"]);
+
+    setTypes(pokemonForm);
 
     setAlternateForms(pokemon, formIdx, variantIdx);
 }
@@ -173,6 +175,16 @@ function setName(dexNumber, pokemonVariant, pokemonName) {
     }
 
     pokemon_name.innerHTML = "#" + dexString + " " + fullName;
+}
+
+function setTypes(pokemonForm) {
+    const pokemonTypes = pokemonForm["pokemon_v2_pokemontypes"];
+    for (const type in pokemonTypes) {
+        const typeName = pokemonTypes[type]["pokemon_v2_type"]["name"]
+        const type_img = document.createElement("img");
+        type_img.src = types[typeName];
+        types_container.appendChild(type_img);
+    }
 }
 
 function setAlternateForms(pokemon, formIdx, variantIdx) {
