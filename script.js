@@ -1,6 +1,9 @@
 var json;
 var types;
 var selectionPool;
+var currentPokemon;
+var currentFormIdx;
+var currentVariantIdx;
 const pokemon_img = document.getElementById("pokemon_img");
 const pokemon_name = document.getElementById("pokemon_name");
 const types_container = document.getElementById("types_container");
@@ -82,40 +85,40 @@ async function setup() {
 }
 
 function generate() {
-    const pokemon = selectionPool[randInt(selectionPool.length)];
+    currentPokemon = selectionPool[randInt(selectionPool.length)];
 
-    setPokemon(pokemon);
+    setPokemon();
 }
 
 function randInt(max) {
     return Math.floor(Math.random() * max);
 }
 
-function setPokemon(pokemon, formIdx=-1, variantIdx=-1) {
+function setPokemon(formIdx=-1, variantIdx=-1) {
     types_container.innerHTML = "";
     forms_container.innerHTML = "";
 
-    const pokemonForms = pokemon["pokemon_v2_pokemons"];
+    const pokemonForms = currentPokemon["pokemon_v2_pokemons"];
     if (formIdx == -1) {
         formIdx = selectFormIdx(pokemonForms);
     }
-    const pokemonForm = pokemonForms[formIdx];
+    currentFormIdx = formIdx;
+    const pokemonForm = pokemonForms[currentFormIdx];
 
     const pokemonVariants = pokemonForm["pokemon_v2_pokemonforms"];
     if (variantIdx == -1) {
         variantIdx = selectVariantIdx(pokemonVariants);
     }
-    const pokemonVariant = pokemonVariants[variantIdx];
+    currentVariantIdx = variantIdx;
+    const pokemonVariant = pokemonVariants[currentVariantIdx];
 
-    const sprite = selectSprite(pokemonVariant);
+    setSprite(selectSprite());
 
-    setSprite(sprite);
+    setName();
 
-    setName(pokemon["id"], pokemonVariant, pokemon["name"]);
+    setTypes();
 
-    setTypes(pokemonForm);
-
-    setAlternateForms(pokemon, formIdx, variantIdx);
+    setAlternateForms();
 }
 
 function selectFormIdx(pokemonForms) {
@@ -124,19 +127,27 @@ function selectFormIdx(pokemonForms) {
     return formIdx;
 }
 
+function getForm(formIdx) {
+    return currentPokemon["pokemon_v2_pokemons"][formIdx];
+}
+
 function selectVariantIdx(pokemonVariants) {
     //TODO: Implement selection filtering
     const variantIdx = randInt(pokemonVariants.length);
     return variantIdx;
 }
 
+function getVariant(formIdx, variantIdx) {
+    return getForm(formIdx)["pokemon_v2_pokemonforms"][variantIdx];
+}
+
 function capitalizeFirstLetter(str) {
     return str.substring(0,1).toUpperCase() + str.substring(1);
 }
 
-function selectSprite(pokemonVariant) {
+function selectSprite(formIdx=currentFormIdx, variantIdx=currentVariantIdx) {
     //TODO: Implement selection logic
-    //const spriteSource = 
+    const pokemonVariant = getVariant(formIdx, variantIdx);
     return pokemonVariant["pokemon_v2_pokemon"]["pokemon_v2_pokemonsprites"][0]["sprites"]["other"]["official-artwork"]["front_default"];
 }
 
@@ -144,18 +155,19 @@ function setSprite(sprite) {
     pokemon_img.src = sprite;
 }
 
-function setName(dexNumber, pokemonVariant, pokemonName) {
+function setName() {
     const dexDigits = Math.floor(Math.log10(json.length) + 1);
-    const dexString = dexNumber.toString().padStart(dexDigits, "0");
+    const dexString = currentPokemon["id"].toString().padStart(dexDigits, "0");
 
     var fullName;
 
-    const pokemonNameParts = pokemonName.split("-"); // In case of two-word names
+    const pokemonNameParts = currentPokemon["name"].split("-"); // In case of two-word names
     for (let i = 0; i < pokemonNameParts.length; i++) {
         pokemonNameParts[i] = capitalizeFirstLetter(pokemonNameParts[i]);
     }
     const pokemonPrettyName = pokemonNameParts.join(" ");
 
+    const pokemonVariant = getVariant(currentFormIdx, currentVariantIdx);
     const formNameParts = pokemonVariant["form_name"].split("-");
     for (let i = 0; i < formNameParts.length; i++) {
         formNameParts[i] = capitalizeFirstLetter(formNameParts[i]);
@@ -177,7 +189,8 @@ function setName(dexNumber, pokemonVariant, pokemonName) {
     pokemon_name.innerHTML = "#" + dexString + " " + fullName;
 }
 
-function setTypes(pokemonForm) {
+function setTypes() {
+    const pokemonForm = getForm(currentFormIdx);
     const pokemonTypes = pokemonForm["pokemon_v2_pokemontypes"];
     for (const type in pokemonTypes) {
         const typeName = pokemonTypes[type]["pokemon_v2_type"]["name"]
@@ -187,8 +200,8 @@ function setTypes(pokemonForm) {
     }
 }
 
-function setAlternateForms(pokemon, formIdx, variantIdx) {
-    const pokemonForms = pokemon["pokemon_v2_pokemons"];
+function setAlternateForms() {
+    const pokemonForms = currentPokemon["pokemon_v2_pokemons"];
     for (const form in pokemonForms) {
 
         const pokemonVariants = pokemonForms[form]["pokemon_v2_pokemonforms"];
@@ -197,16 +210,22 @@ function setAlternateForms(pokemon, formIdx, variantIdx) {
             form_img.classList.add("form_img")
 
             if ((pokemonForms.length > 1) || (pokemonVariants.length > 1)) {
-                if ((form == formIdx) && (variant == variantIdx)) {
+                if ((form == currentFormIdx) && (variant == currentVariantIdx)) {
                     form_img.classList.add("current_form");
                 } else {
-                    form_img.onclick = () => setPokemon(pokemon, form, variant);
+                    form_img.onclick = () => setPokemon(form, variant);
                     form_img.classList.add("clickable");
                 }
             }
 
-            form_img.src = selectSprite(pokemonForms[form]["pokemon_v2_pokemonforms"][variant]);
+            form_img.src = selectSprite(form, variant);
             forms_container.appendChild(form_img);
         }
     }
+}
+
+// -------------------- Event handlers -------------------- //
+
+function handleShinyCheckbox() {
+    
 }

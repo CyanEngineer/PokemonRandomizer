@@ -23,8 +23,9 @@ Based on
 - Gender chance (I forgot to query has_gender_differences)
 - Shiny chance
 - Link to Bulbapedia images archive for pokemon
+- Have standard sprite-container size and allow resize?
 
-### Evolution tree
+### Evolution tree?
 - Bulbapedia-style table of the evolution tree of current pokemon (selectable)
 - How should I deal with regional-only evolutions? Maybe only include in the relevant form?
 - Check ordering (baby pokemon)
@@ -32,10 +33,11 @@ Based on
 ### Linked list (history)?
 
 ### Other todos
-- Burmy, Cherrim, Deerling, Sawsbuck, Vivilion and Flabebe forms are further inside the JSON (perhaps cosmetic forms are placed in there??)
+- Burmy and Flabebe forms are further inside the JSON (perhaps cosmetic forms are placed in there??)
 - Same with Genesect and Xerneas (but I don't think PokéAPI has the different colors (the difference is minor anyways))
 - Same with Shellos and Gastrodon (they are missing "sea" too)
 - Same with Arceus and Silvally, and the types are only in pokemon_v2_pokemonformtypes (except for normal)
+- Figure out what to do with Alcremie forms
 - Correct some form names
   - Alola -> Alolan
   - Galar -> Galarian
@@ -45,6 +47,7 @@ Based on
 - Edge cases
   - Zygarde add "%"
   - Nidoran use gender symbols?
+  - Jangemo-o + Hakamo-o + Kommo-o
   - Ignore forms:
     - Totem Pokemon
     - Mothim
@@ -53,9 +56,11 @@ Based on
     - Koraidon + Miraidon
     - Toxtricity 2nd Gmax form
     - Genesect
+    - Minior meteor colors
   - Type-null -> Type: Null
   - X Shaymin -> X Forme Shaymin
   - Paldea X Breed Tauros -> X Breed Paldean Tauros
+  - X Shellos/Gastrodon -> X Sea Shellos/Gastrodon
   - Arceus + Silvally use form name as type
   - Stellar type??
 
@@ -64,8 +69,10 @@ Based on
 - Arceus and Silvally are the only Pokemon using the pokemon_v2_pokemonformtypes. Their Normal forms do not, though
 - Ogerpon form sprites are misaligned
 - Missing form sprites
-  - Sawsbuck
+  - Deerling + Sawsbuck
   - Pichu
-  - Floette colors
+  - Vivillon
+  - Floette + Florges colors
   - Cherrim
   - Unown
+  - Shellos (+ Gastrodon?)
