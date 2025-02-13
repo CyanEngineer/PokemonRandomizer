@@ -38,6 +38,7 @@ Based on
 - Same with Shellos and Gastrodon (they are missing "sea" too)
 - Same with Arceus and Silvally, and the types are only in pokemon_v2_pokemonformtypes (except for normal)
 - Figure out what to do with Alcremie forms
+- Handle missing images
 - Correct some form names
   - Alola -> Alolan
   - Galar -> Galarian
@@ -45,8 +46,10 @@ Based on
   - Paldea -> Paldean
   - Gmax -> Gigantamax
 - Edge cases
+  - Problem with Politoed? Dunno
   - Zygarde add "%"
   - Nidoran use gender symbols?
+  - Oinkologne genders???
   - Jangemo-o + Hakamo-o + Kommo-o
   - Ignore forms:
     - Totem Pokemon
@@ -68,7 +71,7 @@ Based on
 - Frillish + Jellicent have forms that shouldn't be there (probably for females)
 - Arceus and Silvally are the only Pokemon using the pokemon_v2_pokemonformtypes. Their Normal forms do not, though
 - Ogerpon form sprites are misaligned
-- Missing form sprites
+- Incorrect form sprites
   - Deerling + Sawsbuck
   - Pichu
   - Vivillon
@@ -76,3 +79,6 @@ Based on
   - Cherrim
   - Unown
   - Shellos (+ Gastrodon?)
+  - Squawkabilly (blue, yellow and white "official art" are 3D)
+- Poor shiny spritework
+  - Ancient misdreavous

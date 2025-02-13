@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <title>Pokémon Randomizer</title>
-        <link rel="stylesheet" href="style.css" type="text/css" >
+        <link rel="stylesheet" href="style.css" type="text/css">
     </head>
 
     <body>
@@ -17,6 +17,57 @@
             <h2 id="pokemon_name"></h2>
             <div id="types_container" class="types_container">
                 <!-- Filled by JS -->
+            </div>
+            <div class="sprite_source_container">
+                <div>
+                    <label>Sprite source:</label>
+                    <select id="sprite_source_dropdown">
+                        <option value="pokeapi">PokeAPI sprite</option>
+                        <option value="other official-artwork">Official artwork</option>
+                        <option value="other home">Pokemon Home</option>
+                        <option value="other dream_world">Dream World</option>
+                        <option value="other showdown">Pokemon Showdown</option>
+                        <option value="versions generation-i red-blue">Red / Blue sprite</option>
+                        <option value="versions generation-i yellow">Yellow sprite</option>
+                        <option value="versions generation-ii gold">Gold sprite</option>
+                        <option value="versions generation-ii silver">Silver sprite</option>
+                        <option value="versions generation-ii crystal">Crystal</option>
+                        <option value="versions generation-iii ruby-sapphire">Ruby / Sapphire</option>
+                        <option value="versions generation-iii firered-leafgreen">FireRed / LeafGreen</option>
+                        <option value="versions generation-iii emerald">Emerald</option>
+                        <option value="versions generation-iv diamond-pearl">Diamond / Pearl</option>
+                        <option value="versions generation-iv platinum">Platinum</option>
+                        <option value="versions generation-iv heartgold-soulsilver">HeartGold / SoulSilver</option>
+                        <option value="versions generation-v black-white">Black / White</option>
+                        <option value="versions generation-vi x-y">X / Y</option>
+                        <option value="versions generation-vi omegaruby-alphasapphire">Omega Ruby / Alpha Sapphire</option>
+                        <option value="versions generation-vii ultra-sun-ultra-moon">Ultra Sun / Ultra Moon</option>
+                    </select>
+                </div>
+            </div>
+            <div class="gender_shiny_container">
+                <div class="gender_container">
+                    <h3>Gender</h3>
+                    <div class="switch">
+                        <input type="checkbox" id="switch_checkbox_gender" class="switch_checkbox gender" />
+                        <div class="switch_knob gender"></div>
+                        <div class="switch_bg gender"></div>
+                    </div>
+                    <label>Not all image sources include female forms</label>
+                </div>
+                <div class="shiny_container">
+                    <h3>Shiny</h3>
+                    <div class="switch">
+                        <input type="checkbox" id="switch_checkbox_shiny" class="switch_checkbox shiny" />
+                        <div class="switch_knob shiny"></div>
+                        <div class="switch_bg shiny"></div>
+                    </div>
+                    <div>
+                        <label>Shiny chance:</label>
+                        <input type="number" id="shiny_chance" min="0" max="4096" value="1"/>
+                        <label>/4096</label>
+                    </div>
+                </div>
             </div>
             <div id="forms_container" class="forms_container">
                 <!-- Filled by JS -->

@@ -1,13 +1,21 @@
 var json;
 var types;
 var selectionPool;
+
 var currentPokemon;
 var currentFormIdx;
 var currentVariantIdx;
+
 const pokemon_img = document.getElementById("pokemon_img");
 const pokemon_name = document.getElementById("pokemon_name");
 const types_container = document.getElementById("types_container");
 const forms_container = document.getElementById("forms_container");
+
+const sprite_source_dropdown = document.getElementById("sprite_source_dropdown");
+
+const gender_checkbox = document.getElementById("switch_checkbox_gender");
+const shiny_checkbox = document.getElementById("switch_checkbox_shiny");
+const shiny_chance = document.getElementById("shiny_chance");
 // Species > variety > form > gender > shiny > artworks
 
 setup();
@@ -38,6 +46,7 @@ async function setup() {
                     is_baby
                     is_legendary
                     is_mythical
+                    has_gender_differences
                     pokemon_v2_evolutionchain {
                         pokemon_v2_pokemonspecies(order_by: {id: asc}) {
                             id
@@ -85,9 +94,19 @@ async function setup() {
 }
 
 function generate() {
+    
+    //TODO: Shiny chance
+    shiny_checkbox.checked = decideShiny();
+
     currentPokemon = selectionPool[randInt(selectionPool.length)];
 
     setPokemon();
+}
+
+function decideShiny() {
+    const shinyThresh = shiny_chance.valueAsNumber;
+    const shinyValue = randInt(4096);
+    return shinyValue < shinyThresh;
 }
 
 function randInt(max) {
@@ -97,6 +116,7 @@ function randInt(max) {
 function setPokemon(formIdx=-1, variantIdx=-1) {
     types_container.innerHTML = "";
     forms_container.innerHTML = "";
+    //sprite_source_dropdown.innerHTML = "";
 
     const pokemonForms = currentPokemon["pokemon_v2_pokemons"];
     if (formIdx == -1) {
@@ -110,13 +130,14 @@ function setPokemon(formIdx=-1, variantIdx=-1) {
         variantIdx = selectVariantIdx(pokemonVariants);
     }
     currentVariantIdx = variantIdx;
-    const pokemonVariant = pokemonVariants[currentVariantIdx];
 
-    setSprite(selectSprite());
+    setSprite();
 
     setName();
 
     setTypes();
+
+    //setSpriteSources();
 
     setAlternateForms();
 }
@@ -145,14 +166,39 @@ function capitalizeFirstLetter(str) {
     return str.substring(0,1).toUpperCase() + str.substring(1);
 }
 
-function selectSprite(formIdx=currentFormIdx, variantIdx=currentVariantIdx) {
-    //TODO: Implement selection logic
-    const pokemonVariant = getVariant(formIdx, variantIdx);
-    return pokemonVariant["pokemon_v2_pokemon"]["pokemon_v2_pokemonsprites"][0]["sprites"]["other"]["official-artwork"]["front_default"];
+function setSprite() {
+    pokemon_img.src = selectSprite();
 }
 
-function setSprite(sprite) {
-    pokemon_img.src = sprite;
+function selectSprite(formIdx=currentFormIdx, variantIdx=currentVariantIdx, defaultSprite=false) {
+    //TODO: Implement selection logic
+    const pokemonVariant = getVariant(formIdx, variantIdx);
+
+    if (defaultSprite) {
+        return pokemonVariant["pokemon_v2_pokemon"]["pokemon_v2_pokemonsprites"][0]["sprites"]["other"]["official-artwork"]["front_default"];
+    } else {
+        var genderShiny = "front";
+        if (gender_checkbox.checked && !shiny_checkbox.checked) {
+            genderShiny += "_default";
+        } else {
+            if (shiny_checkbox.checked) {
+                genderShiny += "_shiny";
+            }
+            if (!gender_checkbox.checked) {
+                genderShiny += "_female";
+            }
+        }
+
+        var spriteSource = pokemonVariant["pokemon_v2_pokemon"]["pokemon_v2_pokemonsprites"][0]["sprites"];
+        const spritePath = sprite_source_dropdown.value.split(" ");
+        if (spritePath != "pokeapi") {
+            for (const idk in spritePath) {
+                spriteSource = spriteSource[spritePath[idk]];
+            }
+        }
+
+        return spriteSource[genderShiny];
+    }
 }
 
 function setName() {
@@ -218,7 +264,7 @@ function setAlternateForms() {
                 }
             }
 
-            form_img.src = selectSprite(form, variant);
+            form_img.src = selectSprite(form, variant, true);
             forms_container.appendChild(form_img);
         }
     }
@@ -226,6 +272,12 @@ function setAlternateForms() {
 
 // -------------------- Event handlers -------------------- //
 
-function handleShinyCheckbox() {
-    
-}
+sprite_source_dropdown.addEventListener("change", setSprite);
+
+gender_checkbox.addEventListener("change", () => {
+    setPokemon(currentFormIdx, currentVariantIdx);
+})
+
+shiny_checkbox.addEventListener("change", () => {
+    setPokemon(currentFormIdx, currentVariantIdx);
+})
