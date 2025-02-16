@@ -47,6 +47,67 @@ img {
 	grid-template-columns: 1fr 1fr;
 }
 
+.button_gender {
+	width: 2.5rem;
+	height: 2.5rem;
+	padding-bottom: 0.3rem;
+	color: black;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 2.3rem;
+	font-weight: bold;
+	line-height: 0.1;
+	border: 2px solid;
+	border-radius: 4px;
+
+	&::before {
+		content: "○";
+	}
+
+	&.female::before {
+		content: "♀";
+	}
+
+	&.male::before {
+		content: "♂";
+	}
+
+	&:disabled {
+		background-color: lightgray;
+	}
+
+	&:enabled {
+		cursor: pointer;
+
+		&.female {
+			background-color: #ff8888;
+			border-color: #f44336;
+
+			&:hover {
+				background-color: #e97a7a;
+			}
+
+			&:active {
+				font-size: 2rem;
+				background-color: #c76767;
+			}
+		}
+
+		&.male {
+			background-color: #00ffff;
+			border-color: #03a9f4;
+
+			&:hover {
+				background-color: #00e7e7;
+			}
+
+			&:active {
+				font-size: 2rem;
+				background-color: #00cfcf;
+			}
+		}
+	}
+}
+
 .switch {
 	position: relative;
 	width: var(--switch-width);

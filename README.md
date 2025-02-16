@@ -33,12 +33,16 @@ Based on
 ### Linked list (history)?
 
 ### Other todos
+- Indeterminate issues
+  - Something with Politoed
+  - Something with Arbok
 - Burmy and Flabebe forms are further inside the JSON (perhaps cosmetic forms are placed in there??)
 - Same with Genesect and Xerneas (but I don't think PokéAPI has the different colors (the difference is minor anyways))
 - Same with Shellos and Gastrodon (they are missing "sea" too)
 - Same with Arceus and Silvally, and the types are only in pokemon_v2_pokemonformtypes (except for normal)
 - Figure out what to do with Alcremie forms
 - Handle missing images
+- Maybe Home sprite for form list? I should get something that pref has everything...
 - Correct some form names
   - Alola -> Alolan
   - Galar -> Galarian
@@ -46,11 +50,27 @@ Based on
   - Paldea -> Paldean
   - Gmax -> Gigantamax
 - Edge cases
-  - Problem with Politoed? Dunno
-  - Zygarde add "%"
-  - Nidoran use gender symbols?
-  - Oinkologne genders???
-  - Jangemo-o + Hakamo-o + Kommo-o
+  - Naming
+    - Zygarde add "%"
+    - Nidoran use gender symbols
+    - Jangemo-o + Hakamo-o + Kommo-o
+    - Type-null -> Type: Null
+    - X Shaymin -> X Forme Shaymin
+    - Paldea X Breed Tauros -> X Breed Paldean Tauros
+    - X Shellos/Gastrodon -> X Sea Shellos/Gastrodon
+    - Arceus + Silvally use form name as type
+    - Flabebe -> Flabébé
+  - Gender
+    - Separate forms
+      - Oinkologne
+      - Meowstic
+      - Indeedee
+      - Basculegion
+    - Single-gendered variations (maybe I should just let the gender-slider status depend on the available sprites for current source "This sprite is used for both genders". Implement gender-ratio to manage gender-slider (female, male, no difference, genderless))
+      - Pikachu
+      - Mega
+      - Gmax
+      - Alolan forms (ratatta, raichu, wooper)
   - Ignore forms:
     - Totem Pokemon
     - Mothim
@@ -60,18 +80,16 @@ Based on
     - Toxtricity 2nd Gmax form
     - Genesect
     - Minior meteor colors
-  - Type-null -> Type: Null
-  - X Shaymin -> X Forme Shaymin
-  - Paldea X Breed Tauros -> X Breed Paldean Tauros
-  - X Shellos/Gastrodon -> X Sea Shellos/Gastrodon
-  - Arceus + Silvally use form name as type
   - Stellar type??
 
 ### Stuff I should report
 - Frillish + Jellicent have forms that shouldn't be there (probably for females)
-- Arceus and Silvally are the only Pokemon using the pokemon_v2_pokemonformtypes. Their Normal forms do not, though
+- Arceus and Silvally are 
 - Ogerpon form sprites are misaligned
-- Incorrect form sprites
+- Incorrect gender rate
+  - Fezandipiti
+  - Munkidori
+- Missing form sprites
   - Deerling + Sawsbuck
   - Pichu
   - Vivillon
@@ -80,5 +98,12 @@ Based on
   - Unown
   - Shellos (+ Gastrodon?)
   - Squawkabilly (blue, yellow and white "official art" are 3D)
+  - Burmy (not Wormadam)
+  - Flabebe + Floette
+  - Busted Mimikyu doesn't have official artwork. May be enough reason to use HOME in alternate form list
+- Arceus + Silvally
+  - The only Pokemon using the pokemon_v2_pokemonformtypes. Their Normal forms do not, though
+  - Missing Dream World sprites (Silvally - not sure about Arceus)
+  - All alternate forms use standard sprite
 - Poor shiny spritework
   - Ancient misdreavous
