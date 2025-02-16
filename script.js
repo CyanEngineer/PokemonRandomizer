@@ -25,6 +25,24 @@ const Genders = Object.freeze({
     GENDERLESS: 2
 });
 
+const nameCorrections = {
+    "Nidoran F": "Nidoran♀",
+    "Nidoran M": "Nidoran♂",
+    "Jangmo O": "Jangmo-o",
+    "Hakamo O": "Hakamo-o",
+    "Kommo O": "Kommo-o",
+    "Type Null": "Type: Null",
+    "Flabebe": "Flabébé"
+}
+
+const formCorrections = {
+    "Gmax": "Gigantamax",
+    "Alola": "Alolan",
+    "Galar": "Galarian",
+    "Hisui": "Hisuian",
+    "Paldea": "Paldean"
+}
+
 setup();
 
 async function setup() {
@@ -253,27 +271,47 @@ function setName() {
 
     var fullName;
 
-    const pokemonNameParts = currentPokemon["name"].split("-"); // In case of two-word names
+    // In case of two-word names
+    const pokemonNameParts = currentPokemon["name"].split("-");
     for (let i = 0; i < pokemonNameParts.length; i++) {
         pokemonNameParts[i] = capitalizeFirstLetter(pokemonNameParts[i]);
     }
-    const pokemonPrettyName = pokemonNameParts.join(" ");
+    const pokemonName = pokemonNameParts.join(" ");
+    const pokemonPrettyName = nameCorrections[pokemonName] ?? pokemonName;
 
     const pokemonVariant = getVariant(currentFormIdx, currentVariantIdx);
     const formNameParts = pokemonVariant["form_name"].split("-");
     for (let i = 0; i < formNameParts.length; i++) {
-        formNameParts[i] = capitalizeFirstLetter(formNameParts[i]);
+        const formName = capitalizeFirstLetter(formNameParts[i]);
+        formNameParts[i] = formCorrections[formName] ?? formName;
     }
 
     if (formNameParts.length == 0) {
         fullName = pokemonPrettyName;
     } else if (formNameParts.length == 1) {
-        fullName = formNameParts[0] + " " + pokemonPrettyName;
-    } else {
-        if (formNameParts[0] == "Mega") { // "X"/"Y" comes after the pokemon name
-            fullName = formNameParts[0] + " " + pokemonPrettyName + " " + formNameParts[1];
+        if (pokemonPrettyName == "Unown") {
+            fullName = pokemonPrettyName + " " + formNameParts[0];
+        } else if ((pokemonPrettyName == "Shellos") || (pokemonPrettyName == "Gastrodon")) {
+            fullName = formNameParts[0] + " Sea " + pokemonPrettyName;
+        } else if (pokemonPrettyName == "Shaymin") {
+            fullName = formNameParts[0] + " Forme " + pokemonPrettyName;
+        } else if (pokemonPrettyName == "Zygarde") {
+            if (formNameParts[0] == "Complete") {
+                fullName = pokemonPrettyName + " " + formNameParts[0] + " Forme"
+            } else {
+                fullName = pokemonPrettyName + " " + formNameParts[0] + "% Forme"
+            }
         } else {
-            
+            fullName = formNameParts[0] + " " + pokemonPrettyName;
+        }
+    } else {
+        if ((formNameParts[0] == "Mega") && 
+            ((formNameParts[1] == "X") ||
+             (formNameParts[1] == "Y"))) { // "X"/"Y" comes after the pokemon name
+            fullName = formNameParts[0] + " " + pokemonPrettyName + " " + formNameParts[1];
+        } else if ((pokemonPrettyName == "Tauros") && (formNameParts[0] == "Paldean")) {
+            fullName = formNameParts[1] + " " + formNameParts[2] + " " + formNameParts[0] + pokemonPrettyName;
+        } else {
             fullName = formNameParts.join(" ") + " " + pokemonPrettyName;
         }
     }
