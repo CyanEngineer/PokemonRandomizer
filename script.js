@@ -115,7 +115,117 @@ async function setup() {
             }
         });
     
+    modJson();
+    
     generate();
+}
+
+// Make a few changes to the data
+function modJson() {
+    // Remove Totem forms
+    json[19]["pokemon_v2_pokemons"].splice(2); // Raticate
+    json[104]["pokemon_v2_pokemons"].splice(2); // Marowak
+    json[734]["pokemon_v2_pokemons"].splice(1); // Gumshoos
+    json[737]["pokemon_v2_pokemons"].splice(1); // Vikavolt
+    json[742]["pokemon_v2_pokemons"].splice(1); // Ribombee
+    json[751]["pokemon_v2_pokemons"].splice(1); // Araquanid
+    json[753]["pokemon_v2_pokemons"].splice(1); // Lurantis
+    json[757]["pokemon_v2_pokemons"].splice(1); // Salazzle
+    json[776]["pokemon_v2_pokemons"].splice(1); // Togedemaru
+    json[777]["pokemon_v2_pokemons"].splice(2); // Mimikyu
+    json[783]["pokemon_v2_pokemons"].splice(1); // Kommo-o
+
+    // Merge Pokemon where genders are sperate forms
+    const offenders = [677, 875, 901, 915] // Meowstic, Indeedee, Basculegion, Oinkologne
+    for (const offender in offenders) {
+        const i = offenders[offender];
+        const name = json[i]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["name"];
+        json[i]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["name"] = name.replace("-male", "");
+        json[i]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["form_name"] = "";
+        const sprites1 = json[i]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["pokemon_v2_pokemon"]["pokemon_v2_pokemonsprites"][0]["sprites"];
+        const sprites2 = json[i]["pokemon_v2_pokemons"][1]["pokemon_v2_pokemonforms"][0]["pokemon_v2_pokemon"]["pokemon_v2_pokemonsprites"][0]["sprites"];
+        
+        sprites1["front_female"] = sprites2["front_default"];
+        sprites1["front_shiny_female"] = sprites2["front_shiny"];
+    
+        sprites1["other"]["official-artwork"]["front_female"] = sprites2["other"]["official-artwork"]["front_default"];
+        sprites1["other"]["official-artwork"]["front_shiny_female"] = sprites2["other"]["official-artwork"]["front_shiny"];
+        sprites1["other"]["home"]["front_female"] = sprites2["other"]["home"]["front_default"];
+        sprites1["other"]["home"]["front_shiny_female"] = sprites2["other"]["home"]["front_shiny"];
+        sprites1["other"]["showdown"]["front_female"] = sprites2["other"]["showdown"]["front_default"];
+        sprites1["other"]["showdown"]["front_shiny_female"] = sprites2["other"]["showdown"]["front_shiny"];
+    
+        sprites1["versions"]["generation-v"]["black-white"]["front_female"] = sprites2["versions"]["generation-v"]["black-white"]["front_default"];
+        sprites1["versions"]["generation-v"]["black-white"]["front_shiny_female"] = sprites2["versions"]["generation-v"]["black-white"]["front_shiny"];
+        sprites1["versions"]["generation-vi"]["x-y"]["front_female"] = sprites2["versions"]["generation-vi"]["x-y"]["front_default"];
+        sprites1["versions"]["generation-vi"]["x-y"]["front_shiny_female"] = sprites2["versions"]["generation-vi"]["x-y"]["front_shiny"];
+        sprites1["versions"]["generation-vi"]["omegaruby-alphasapphire"]["front_female"] = sprites2["versions"]["generation-vi"]["omegaruby-alphasapphire"]["front_default"];
+        sprites1["versions"]["generation-vi"]["omegaruby-alphasapphire"]["front_shiny_female"] = sprites2["versions"]["generation-vi"]["omegaruby-alphasapphire"]["front_shiny"];
+        sprites1["versions"]["generation-vii"]["ultra-sun-ultra-moon"]["front_female"] = sprites2["versions"]["generation-vii"]["ultra-sun-ultra-moon"]["front_default"];
+        sprites1["versions"]["generation-vii"]["ultra-sun-ultra-moon"]["front_shiny_female"] = sprites2["versions"]["generation-vii"]["ultra-sun-ultra-moon"]["front_shiny"];    
+    
+        json[i]["pokemon_v2_pokemons"].splice(1);
+    }
+
+    // Remove forms without visual differences
+    json[413]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["name"] = "mothim";
+    json[413]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["form_name"] = "";
+    json[413]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"].splice(1);
+
+    json[648]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"].splice(1); // Genesect
+
+    json[663]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["name"] = "scatterbug";
+    json[663]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["form_name"] = "";
+    json[663]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"].splice(1);
+
+    json[664]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["name"] = "spewpa";
+    json[664]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["form_name"] = "";
+    json[664]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"].splice(1);
+
+    json[709]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["name"] = "pumpkaboo";
+    json[709]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["form_name"] = "";
+    json[709]["pokemon_v2_pokemons"].splice(1);
+
+    json[710]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["name"] = "gourgeist";
+    json[710]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["form_name"] = "";
+    json[710]["pokemon_v2_pokemons"].splice(1);
+
+    json[715]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["name"] = "xerneas";
+    json[715]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["form_name"] = "";
+    json[715]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"].splice(1);
+
+    json[717]["pokemon_v2_pokemons"].splice(1, 2); // Zygarde
+
+    json[773]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["name"] = "minior-meteor";
+    json[773]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["form_name"] = "meteor";
+    json[773]["pokemon_v2_pokemons"].splice(1, 6);
+
+    json[848]["pokemon_v2_pokemons"][2]["pokemon_v2_pokemonforms"][0]["name"] = "toxtricity-gmax";
+    json[848]["pokemon_v2_pokemons"].splice(3);
+
+    json[853]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["name"] = "sinistea";
+    json[853]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["form_name"] = "";
+    json[853]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"].splice(1);
+
+    json[854]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["name"] = "polteageist";
+    json[854]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["form_name"] = "";
+    json[854]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"].splice(1);
+
+    json[1006]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["name"] = "koraidon";
+    json[1006]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["form_name"] = "";
+    json[1006]["pokemon_v2_pokemons"].splice(1);
+
+    json[1007]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["name"] = "miraidon";
+    json[1007]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["form_name"] = "";
+    json[1007]["pokemon_v2_pokemons"].splice(1);
+
+    json[1011]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["name"] = "poltchageist";
+    json[1011]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["form_name"] = "";
+    json[1011]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"].splice(1);
+
+    json[1012]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["name"] = "sinistcha";
+    json[1012]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["form_name"] = "";
+    json[1012]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"].splice(1);
 }
 
 function generate() {

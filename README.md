@@ -39,7 +39,7 @@ Based on
 - Arceus and Silvally types are only in pokemon_v2_pokemonformtypes (except for normal)
 - Figure out what to do with Alcremie and Vivillon forms
 - Handle missing images
-- Maybe Home sprite for form list? Official is missing Broken Mimikyu
+- Maybe Home sprite for form list? Official is missing 27 Unown and Broken Mimikyu (look for more examples)
 - Edge cases
   - ~~Naming~~
     - ~~Zygarde add "%"~~
@@ -51,28 +51,28 @@ Based on
     - ~~X Shellos/Gastrodon -> X Sea Shellos/Gastrodon~~
     - ~~Flabebe -> Flabébé~~
   - Gender
-    - Separate forms
-      - Oinkologne
-      - Meowstic
-      - Indeedee
-      - Basculegion
+    - ~~Separate forms~~
+      - ~~Oinkologne~~
+      - ~~Meowstic~~
+      - ~~Indeedee~~
+      - ~~Basculegion~~
     - Single-gendered variations
       - Pikachu (Do I care enough to fix this?)
   - Forms missing sprites
     - Unown
     - Arceus
     - Silvally
-  - Ignore forms:
-    - Totem Pokemon
-    - Mothim
-    - Pompkaboo + Gourgeist
-    - Scatterbug + Spewpa 
-    - Koraidon + Miraidon
-    - Toxtricity 2nd Gmax form
-    - Genesect
-    - Xerneas
-    - Zygarde Power Construct
-    - Minior meteor colors
+  - ~~Ignore forms:~~
+    - ~~Totem Pokemon~~
+    - ~~Mothim~~
+    - ~~Pompkaboo + Gourgeist~~
+    - ~~Scatterbug + Spewpa~~
+    - ~~Koraidon + Miraidon~~
+    - ~~Toxtricity 2nd Gmax form~~
+    - ~~Genesect~~
+    - ~~Xerneas~~
+    - ~~Zygarde Power Construct~~
+    - ~~Minior meteor colors~~
   - Arceus + Silvally types
   - Stellar type??
 
@@ -80,6 +80,7 @@ Based on
 - Frillish + Jellicent have forms that shouldn't be there (probably for females)
 - Arceus and Silvally are 
 - Ogerpon form sprites are misaligned
+- No Showdown gen 9 sprites
 - Incorrect gender rate
   - Fezandipiti
   - Munkidori
@@ -94,7 +95,6 @@ Based on
   - Squawkabilly (blue, yellow and white "official art" are 3D)
   - Burmy (not Wormadam)
   - Flabebe + Floette
-  - Busted Mimikyu doesn't have official artwork. May be enough reason to use HOME in alternate form list
 - Arceus + Silvally
   - Types are only in pokemon_v2_pokemonformtypes (except normal)
   - Missing Dream World sprites (Silvally - not sure about Arceus)
