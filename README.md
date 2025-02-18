@@ -19,6 +19,7 @@ Based on
 ### Sprite selection
 - Choose a sprite to display out of the sprites available in PokéAPI
   - Choose a preferred sprite source
+    - Disable sprite sources without the sprite
   - Choose a backup source if preferred doesn't exist
 - ~~Gender chance (I forgot to query has_gender_differences)~~
 - ~~Shiny chance~~
@@ -48,18 +49,18 @@ Based on
     - ~~Type-null -> Type: Null~~
     - ~~X Shaymin -> X Forme Shaymin~~
     - ~~Paldea X Breed Tauros -> X Breed Paldean Tauros~~
-    - ~~X Shellos/Gastrodon -> X Sea Shellos/Gastrodon~~
     - ~~Flabebe -> Flabébé~~
   - Gender
     - ~~Separate forms~~
       - ~~Oinkologne~~
       - ~~Meowstic~~
-      - ~~Indeedee~~
       - ~~Basculegion~~
     - Single-gendered variations
       - Pikachu (Do I care enough to fix this?)
+    - Gender differences were added in gen IV
   - Forms missing sprites
     - Unown
+    - Broken Mimikyu
     - Arceus
     - Silvally
   - ~~Ignore forms:~~
@@ -78,23 +79,23 @@ Based on
 
 ### Stuff I should report
 - Frillish + Jellicent have forms that shouldn't be there (probably for females)
-- Arceus and Silvally are 
 - Ogerpon form sprites are misaligned
 - No Showdown gen 9 sprites
 - Incorrect gender rate
   - Fezandipiti
   - Munkidori
-- Missing form sprites
+- Missing sprites
   - Deerling + Sawsbuck
-  - Pichu
-  - Vivillon
+  - Spiky-eared Pichu
+  - Vivillon patterns
   - Floette + Florges colors
-  - Cherrim
-  - Unown
+  - Cherrim 
+  - Unown (all sources)
   - Shellos (+ Gastrodon?)
   - Squawkabilly (blue, yellow and white "official art" are 3D)
   - Burmy (not Wormadam)
   - Flabebe + Floette
+  - Many gen II and III pokemon are missing in Firered/Leafgreen
 - Arceus + Silvally
   - Types are only in pokemon_v2_pokemonformtypes (except normal)
   - Missing Dream World sprites (Silvally - not sure about Arceus)

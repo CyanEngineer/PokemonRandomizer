@@ -4,6 +4,7 @@ var selectionPool;
 
 var currentPokemon;
 var currentGender; // TODO: currentShiny ??
+var currentGenderShiny;
 var currentFormIdx;
 var currentVariantIdx;
 
@@ -137,13 +138,12 @@ function modJson() {
 
     // Merge Pokemon where genders are sperate forms
     const offenders = [677, 875, 901, 915] // Meowstic, Indeedee, Basculegion, Oinkologne
-    for (const offender in offenders) {
-        const i = offenders[offender];
-        const name = json[i]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["name"];
-        json[i]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["name"] = name.replace("-male", "");
-        json[i]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["form_name"] = "";
-        const sprites1 = json[i]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["pokemon_v2_pokemon"]["pokemon_v2_pokemonsprites"][0]["sprites"];
-        const sprites2 = json[i]["pokemon_v2_pokemons"][1]["pokemon_v2_pokemonforms"][0]["pokemon_v2_pokemon"]["pokemon_v2_pokemonsprites"][0]["sprites"];
+    for (const offender of offenders) {
+        const name = json[offender]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["name"];
+        json[offender]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["name"] = name.replace("-male", "");
+        json[offender]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["form_name"] = "";
+        const sprites1 = json[offender]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["pokemon_v2_pokemon"]["pokemon_v2_pokemonsprites"][0]["sprites"];
+        const sprites2 = json[offender]["pokemon_v2_pokemons"][1]["pokemon_v2_pokemonforms"][0]["pokemon_v2_pokemon"]["pokemon_v2_pokemonsprites"][0]["sprites"];
         
         sprites1["front_female"] = sprites2["front_default"];
         sprites1["front_shiny_female"] = sprites2["front_shiny"];
@@ -164,7 +164,7 @@ function modJson() {
         sprites1["versions"]["generation-vii"]["ultra-sun-ultra-moon"]["front_female"] = sprites2["versions"]["generation-vii"]["ultra-sun-ultra-moon"]["front_default"];
         sprites1["versions"]["generation-vii"]["ultra-sun-ultra-moon"]["front_shiny_female"] = sprites2["versions"]["generation-vii"]["ultra-sun-ultra-moon"]["front_shiny"];    
     
-        json[i]["pokemon_v2_pokemons"].splice(1);
+        json[offender]["pokemon_v2_pokemons"].splice(1);
     }
 
     // Remove forms without visual differences
@@ -256,16 +256,6 @@ function decideGender() {
         } else {
             return Genders.MALE;
         }
-    } 
-
-    if (getVariant(currentFormIdx, currentVariantIdx)["form_name"] == "mega" ||
-        getVariant(currentFormIdx, currentVariantIdx)["form_name"] == "gmax"
-    ) {
-        return true; //TODO: Implement indeterminate option
-    } else {
-        const lskdjflj = randInt(2);
-        console.log(lskdjflj);
-        return lskdjflj == 1;
     }
 }
 
@@ -307,6 +297,8 @@ function setPokemon(formIdx=-1, variantIdx=-1) {
 
     setSprite();
 
+    checkSpriteSources();
+
     setName();
 
     setTypes();
@@ -342,37 +334,51 @@ function setSprite() {
     label_gender.innerHTML = "Placeholder text";
     const pokemonVariant = getVariant(currentFormIdx, currentVariantIdx);
 
-    var genderShiny = "front";
-
-    if (shiny_checkbox.checked) {
-        genderShiny += "_shiny";
-    }
-
-    if (!button_gender.disabled) {
-        if (fetchSprite(pokemonVariant, genderShiny + "_female") == null) {
-            label_gender.innerHTML = "Sprite source only contains default gender";
-        } else if (currentGender == Genders.FEMALE) {
-            genderShiny += "_female";
-        }
-    }
+    if (fetchSprite(pokemonVariant, "front_default", sprite_source_dropdown.value) == null) {
+        pokemon_img.src = "No artwork.png"
+    } else {
+        currentGenderShiny = "front";
     
-    if (genderShiny == "front") {
-        genderShiny += "_default";
+        if (shiny_checkbox.checked) {
+            currentGenderShiny += "_shiny";
+        }
+    
+        if (!button_gender.disabled) {
+            if (fetchSprite(pokemonVariant, currentGenderShiny + "_female", sprite_source_dropdown.value) == null) {
+                label_gender.innerHTML = "Sprite source only contains default gender";
+            } else if (currentGender == Genders.FEMALE) {
+                currentGenderShiny += "_female";
+            }
+        }
+        
+        if (currentGenderShiny == "front") {
+            currentGenderShiny += "_default";
+        }
+    
+        pokemon_img.src = fetchSprite(pokemonVariant, currentGenderShiny, sprite_source_dropdown.value);
     }
 
-    pokemon_img.src = fetchSprite(pokemonVariant, genderShiny);
 }
 
-function fetchSprite(pokemonVariant, genderShiny) {
+function fetchSprite(pokemonVariant, genderShiny, source) {
     var spriteSource = pokemonVariant["pokemon_v2_pokemon"]["pokemon_v2_pokemonsprites"][0]["sprites"];
-    const spritePath = sprite_source_dropdown.value.split(" ");
+    const spritePath = source.split(" ");
     if (spritePath != "pokeapi") {
-        for (const idk in spritePath) {
-            spriteSource = spriteSource[spritePath[idk]];
+        for (const pathLvl of spritePath) {
+            spriteSource = spriteSource[pathLvl];
         }
     }
 
     return spriteSource[genderShiny];
+}
+
+function checkSpriteSources() {
+    for (const group of sprite_source_dropdown.children) {
+        for (const source of group.children) {
+            const pokemonVariant = getVariant(currentFormIdx, currentVariantIdx);
+            source.disabled = fetchSprite(pokemonVariant, currentGenderShiny, source.value) == null;
+        }
+    }
 }
 
 function setName() {
@@ -432,8 +438,8 @@ function setName() {
 function setTypes() {
     const pokemonForm = getForm(currentFormIdx);
     const pokemonTypes = pokemonForm["pokemon_v2_pokemontypes"];
-    for (const type in pokemonTypes) {
-        const typeName = pokemonTypes[type]["pokemon_v2_type"]["name"]
+    for (const type of pokemonTypes) {
+        const typeName = type["pokemon_v2_type"]["name"]
         const type_img = document.createElement("img");
         type_img.src = types[typeName];
         types_container.appendChild(type_img);
@@ -442,23 +448,23 @@ function setTypes() {
 
 function setAlternateForms() {
     const pokemonForms = currentPokemon["pokemon_v2_pokemons"];
-    for (const form in pokemonForms) {
+    for (const formIdx in pokemonForms) {
 
-        const pokemonVariants = pokemonForms[form]["pokemon_v2_pokemonforms"];
-        for (const variant in pokemonVariants) {
+        const pokemonVariants = pokemonForms[formIdx]["pokemon_v2_pokemonforms"];
+        for (const variantIdx in pokemonVariants) {
             const form_img = document.createElement("img");
             form_img.classList.add("form_img")
 
             if ((pokemonForms.length > 1) || (pokemonVariants.length > 1)) {
-                if ((form == currentFormIdx) && (variant == currentVariantIdx)) {
+                if ((formIdx == currentFormIdx) && (variantIdx == currentVariantIdx)) {
                     form_img.classList.add("current_form");
                 } else {
-                    form_img.onclick = () => setPokemon(form, variant); // TODO: Perhaps I need to make a function that is more specialized
+                    form_img.onclick = () => setPokemon(formIdx, variantIdx); // TODO: Perhaps I need to make a function that is more specialized
                     form_img.classList.add("clickable");
                 }
             }
 
-            const pokemonVariant = getVariant(form, variant);
+            const pokemonVariant = getVariant(formIdx, variantIdx);
             form_img.src = pokemonVariant["pokemon_v2_pokemon"]["pokemon_v2_pokemonsprites"][0]["sprites"]["other"]["official-artwork"]["front_default"];
             
             forms_container.appendChild(form_img);
