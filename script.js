@@ -8,6 +8,8 @@ var currentGenderShiny;
 var currentFormIdx;
 var currentVariantIdx;
 
+
+const pokemon_img_container = document.getElementById("pokemon_img_container");
 const pokemon_img = document.getElementById("pokemon_img");
 const pokemon_name = document.getElementById("pokemon_name");
 const types_container = document.getElementById("types_container");
@@ -354,8 +356,12 @@ function setSprite() {
         if (currentGenderShiny == "front") {
             currentGenderShiny += "_default";
         }
+
+        const source = sprite_source_dropdown.value;
     
-        pokemon_img.src = fetchSprite(pokemonVariant, currentGenderShiny, sprite_source_dropdown.value);
+        decideRenderingMethod(source);
+        
+        pokemon_img.src = fetchSprite(pokemonVariant, currentGenderShiny, source);
     }
 
 }
@@ -372,11 +378,21 @@ function fetchSprite(pokemonVariant, genderShiny, source) {
     return spriteSource[genderShiny];
 }
 
+function decideRenderingMethod(spriteSource) {
+    const sourceName = spriteSource.split(" ").at(-1);
+    
+    if ((sourceName == "official-artwork") || (sourceName == "home") || (sourceName == "dream_world")) {
+        pokemon_img.classList.remove("pixelated");
+    } else if (!pokemon_img.classList.contains("pixelated")) {
+        pokemon_img.classList.add("pixelated");
+    }
+}
+
 function checkSpriteSources() {
     for (const group of sprite_source_dropdown.children) {
         for (const source of group.children) {
             const pokemonVariant = getVariant(currentFormIdx, currentVariantIdx);
-            source.disabled = fetchSprite(pokemonVariant, currentGenderShiny, source.value) == null;
+            source.disabled = fetchSprite(pokemonVariant, "front_default", source.value) == null;
         }
     }
 }
@@ -470,6 +486,23 @@ function setAlternateForms() {
             forms_container.appendChild(form_img);
         }
     }
+}
+
+// -------------------- Buttons -------------------- //
+
+function oneXView() {
+    pokemon_img.classList.remove("fill_view");
+}
+
+function fillView() {
+    if (!pokemon_img.classList.contains("fill_view")) {
+        pokemon_img.classList.add("fill_view");
+    }
+}
+
+function resetView() {
+    pokemon_img_container.style.height="512px";
+    pokemon_img_container.style.width="512px";
 }
 
 function switchGender() {

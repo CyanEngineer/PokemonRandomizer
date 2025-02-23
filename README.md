@@ -19,17 +19,12 @@ Based on
 ### Sprite selection
 - Choose a sprite to display out of the sprites available in PokéAPI
   - Choose a preferred sprite source
-    - Disable sprite sources without the sprite
+    - ~~Disable sprite sources without the sprite~~
   - Choose a backup source if preferred doesn't exist
 - ~~Gender chance (I forgot to query has_gender_differences)~~
 - ~~Shiny chance~~
 - Link to Bulbapedia images archive for pokemon
 - Have standard sprite-container size and allow resize?
-
-### Evolution tree?
-- Bulbapedia-style table of the evolution tree of current pokemon (selectable)
-- How should I deal with regional-only evolutions? Maybe only include in the relevant form?
-- Check ordering (baby pokemon)
 
 ### Linked list (history)?
 
@@ -38,8 +33,8 @@ Based on
   - Something with Politoed
   - Something with Arbok
 - Arceus and Silvally types are only in pokemon_v2_pokemonformtypes (except for normal)
-- Figure out what to do with Alcremie and Vivillon forms
 - Handle missing images
+- Link to other resources (Bulbapedia, Bulbapedia img archive, Pokemondb, Official Pokedex)
 - Maybe Home sprite for form list? Official is missing 27 Unown and Broken Mimikyu (look for more examples)
 - Edge cases
   - ~~Naming~~
@@ -58,6 +53,7 @@ Based on
     - Single-gendered variations
       - Pikachu (Do I care enough to fix this?)
     - Gender differences were added in gen IV
+    - I guess I made available artwork sources dependent on gender...
   - Forms missing sprites
     - Unown
     - Broken Mimikyu
@@ -84,21 +80,30 @@ Based on
 - Incorrect gender rate
   - Fezandipiti
   - Munkidori
+- Incorrect sprites
+  - PokeAPI Mega Venusaur shouldn't have female sprite
+  - Official Zen Darmanitan???
+  - PokeAPI Shiny Zygarde 50
 - Missing sprites
   - Deerling + Sawsbuck
   - Spiky-eared Pichu
-  - Vivillon patterns
-  - Floette + Florges colors
+  - Floette + Florges
   - Cherrim 
   - Unown (all sources)
   - Shellos (+ Gastrodon?)
   - Squawkabilly (blue, yellow and white "official art" are 3D)
   - Burmy (not Wormadam)
   - Flabebe + Floette
+  - Unfeazant, Frillish, Jellicent and Pyroar female official
   - Many gen II and III pokemon are missing in Firered/Leafgreen
+  - Furfrou
+  - Vivillon
+  - Alcremie
+  - PokeAPI Zygarde 10 (it exists in power construct)
+- Bad sprites
+  - Official Shiny Ancient misdreavous
+  - Showdown Hisuian Electrode
 - Arceus + Silvally
   - Types are only in pokemon_v2_pokemonformtypes (except normal)
   - Missing Dream World sprites (Silvally - not sure about Arceus)
   - All alternate forms use standard sprite
-- Poor shiny spritework
-  - Ancient misdreavous

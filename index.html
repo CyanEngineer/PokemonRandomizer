@@ -11,8 +11,21 @@
             <button class="generage_button" onclick="generate()">
                 Generate!
             </button>
-            <div>
-                <img id="pokemon_img" class="pokemon_img">
+            <div class="img_and_button_container">
+                <div id="pokemon_img_container" class="pokemon_img_container">
+                    <img id="pokemon_img" class="pokemon_img">
+                </div>
+                <div class="pokemon_img_button_container">
+                    <button id="button_1x_view" class="img_button" onclick="oneXView()">
+                        <img src="real_size_icon.svg" title="1x view" alt="1x view">
+                    </button>
+                    <button id="button_fill_view" class="img_button" onclick="fillView()">
+                        <img src="fill_icon.svg" title="Fill view" alt="Fill view">
+                    </button>
+                    <button id="button_reset_view" class="img_button" onclick="resetView()">
+                        <img src="reset_icon.svg" title="Reset view" alt="Reset view">
+                    </button>
+                </div>
             </div>
             <h2 id="pokemon_name"></h2>
             <div id="types_container" class="types_container">
