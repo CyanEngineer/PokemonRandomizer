@@ -81,7 +81,10 @@ aside {
     height: 2rem;
 }
 
-
+.logo {
+	width: 40px;
+	height: 40px;
+}
 
 .gender_shiny_container {
 	display: grid;

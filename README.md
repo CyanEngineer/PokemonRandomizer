@@ -34,7 +34,8 @@ Based on
   - Something with Arbok
 - Arceus and Silvally types are only in pokemon_v2_pokemonformtypes (except for normal)
 - Handle missing images
-- Link to other resources (Bulbapedia, Bulbapedia img archive, Pokemondb, Official Pokedex)
+- Dream World doesn't have shinies
+- ~~Link to other resources (Bulbapedia, Bulbapedia img archive, Pokemondb, Official Pokedex)~~
 - Maybe Home sprite for form list? Official is missing 27 Unown and Broken Mimikyu (look for more examples)
 - Edge cases
   - ~~Naming~~

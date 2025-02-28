@@ -17,6 +17,15 @@ const forms_container = document.getElementById("forms_container");
 
 const sprite_source_dropdown = document.getElementById("sprite_source_dropdown");
 
+const link_pokedex = document.getElementById("link_pokedex");
+const link_bulba_wiki = document.getElementById("link_bulba_wiki");
+const link_bulba_archive = document.getElementById("link_bulba_archive");
+const link_serebii = document.getElementById("link_serebii");
+const link_serebii_cards = document.getElementById("link_serebii_cards");
+const link_pokemondb = document.getElementById("link_pokemondb");
+const link_spriters_resource = document.getElementById("link_spriters_resource");
+const link_models_resource = document.getElementById("link_models_resource");
+
 const button_gender = document.getElementById("button_gender");
 const label_gender = document.getElementById("label_gender");
 const shiny_checkbox = document.getElementById("switch_checkbox_shiny");
@@ -35,7 +44,11 @@ const nameCorrections = {
     "Hakamo O": "Hakamo-o",
     "Kommo O": "Kommo-o",
     "Type Null": "Type: Null",
-    "Flabebe": "Flabébé"
+    "Flabebe": "Flabébé",
+    "Wo Chien": "Wo-Chien",
+    "Chien Pao": "Chien-Pao",
+    "Ting Lu": "Ting-Lu",
+    "Chi Yu": "Chi-Yu"
 }
 
 const formCorrections = {
@@ -305,6 +318,8 @@ function setPokemon(formIdx=-1, variantIdx=-1) {
 
     setTypes();
 
+    setLinks();
+
     setAlternateForms();
 }
 
@@ -404,12 +419,7 @@ function setName() {
     var fullName;
 
     // In case of two-word names
-    const pokemonNameParts = currentPokemon["name"].split("-");
-    for (let i = 0; i < pokemonNameParts.length; i++) {
-        pokemonNameParts[i] = capitalizeFirstLetter(pokemonNameParts[i]);
-    }
-    const pokemonName = pokemonNameParts.join(" ");
-    const pokemonPrettyName = nameCorrections[pokemonName] ?? pokemonName;
+    const pokemonPrettyName = getPrettyName(currentPokemon["name"]);
 
     const pokemonVariant = getVariant(currentFormIdx, currentVariantIdx);
     const formNameParts = pokemonVariant["form_name"].split("-");
@@ -451,6 +461,16 @@ function setName() {
     pokemon_name.innerHTML = "#" + dexString + " " + fullName;
 }
 
+function getPrettyName(dataName) {
+    const pokemonNameParts = dataName.split("-");
+    for (let i = 0; i < pokemonNameParts.length; i++) {
+        pokemonNameParts[i] = capitalizeFirstLetter(pokemonNameParts[i]);
+    }
+    const pokemonName = pokemonNameParts.join(" ");
+
+    return nameCorrections[pokemonName] ?? pokemonName;
+}
+
 function setTypes() {
     const pokemonForm = getForm(currentFormIdx);
     const pokemonTypes = pokemonForm["pokemon_v2_pokemontypes"];
@@ -460,6 +480,24 @@ function setTypes() {
         type_img.src = types[typeName];
         types_container.appendChild(type_img);
     }
+}
+
+function setLinks() {
+    const bulbaName = getPrettyName(currentPokemon['name']).replaceAll(" ", "_");
+    var serebiiName = currentPokemon['name'];
+    if (!(serebiiName in ["jangmo-o", "hakamo-o", "komma-o", "wo-chien", "chien-pao", "ting-lu", "chi-yu"])) {
+        serebiiName = serebiiName.replace("-", "").replace("typenull", "type:null");
+    }
+    const xResourceName = {"nidoran-f": "%23029 - nidoran♀", "nidoran-m": "%23032 - nidoran♂"}[currentPokemon['name']] ?? currentPokemon['name'];
+
+    link_pokedex.href = `https://www.pokemon.com/us/pokedex/${currentPokemon['id']}`;
+    link_bulba_wiki.href = `https://bulbapedia.bulbagarden.net/wiki/${bulbaName}_(Pokémon)`;
+    link_bulba_archive.href = `https://archives.bulbagarden.net/wiki/Category:${bulbaName}`;
+    link_serebii.href = `https://serebii.net/pokemon/${serebiiName}/`; //nidoranf, type:null, jangmo-o, tapulele
+    link_serebii_cards.href = `https://www.serebii.net/card/dex/${currentPokemon['id'].toString().padStart(3, "0")}.shtml`;
+    link_pokemondb.href = `https://pokemondb.net/pokedex/${currentPokemon['name']}`;
+    link_spriters_resource.href = `https://www.spriters-resource.com/search/?q="${xResourceName}"`
+    link_models_resource.href = `https://www.models-resource.com/search/?q="${xResourceName}"`
 }
 
 function setAlternateForms() {
