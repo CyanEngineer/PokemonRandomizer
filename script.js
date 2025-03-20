@@ -1,6 +1,10 @@
 var json;
 var types;
 var selectionPool;
+var fullFilterPool;
+var filterPool;
+
+var pokemonNameList;
 
 var currentPokemon;
 var currentGender; // TODO: currentShiny ??
@@ -8,7 +12,11 @@ var currentGenderShiny;
 var currentFormIdx;
 var currentVariantIdx;
 
+// Filters elements
+const input_name = document.getElementById("input_name");
+const datalist_name = document.getElementById("datalist_name");
 
+// Randomizer elements
 const pokemon_img_container = document.getElementById("pokemon_img_container");
 const pokemon_img = document.getElementById("pokemon_img");
 const pokemon_name = document.getElementById("pokemon_name");
@@ -17,6 +25,12 @@ const forms_container = document.getElementById("forms_container");
 
 const sprite_source_dropdown = document.getElementById("sprite_source_dropdown");
 
+const button_gender = document.getElementById("button_gender");
+const label_gender = document.getElementById("label_gender");
+const shiny_checkbox = document.getElementById("switch_checkbox_shiny");
+const shiny_chance = document.getElementById("shiny_chance");
+
+// External links elements
 const link_pokedex = document.getElementById("link_pokedex");
 const link_bulba_wiki = document.getElementById("link_bulba_wiki");
 const link_bulba_archive = document.getElementById("link_bulba_archive");
@@ -25,11 +39,6 @@ const link_serebii_cards = document.getElementById("link_serebii_cards");
 const link_pokemondb = document.getElementById("link_pokemondb");
 const link_spriters_resource = document.getElementById("link_spriters_resource");
 const link_models_resource = document.getElementById("link_models_resource");
-
-const button_gender = document.getElementById("button_gender");
-const label_gender = document.getElementById("label_gender");
-const shiny_checkbox = document.getElementById("switch_checkbox_shiny");
-const shiny_chance = document.getElementById("shiny_chance");
 
 const Genders = Object.freeze({
     FEMALE: 0,
@@ -130,11 +139,15 @@ async function setup() {
                 const res = await response.json();
                 json = res["data"]["species"];
                 selectionPool = json;
+                fullFilterPool = [...Array(selectionPool.length).keys()];
+                filterPool = fullFilterPool;
                 console.log(json) //TODO: Delete this
             }
         });
     
     modJson();
+
+    populateDataList();
     
     generate();
 }
@@ -246,15 +259,43 @@ function modJson() {
     json[1012]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"].splice(1);
 }
 
+async function populateDataList() {
+    
+    pokemonNameList = Array(selectionPool.length);
+    const dexDigits = Math.floor(Math.log10(json.length) + 1);
+
+    for (let i=0; i<selectionPool.length; i++) {
+        const pokemon = json[i];
+        const dexString = pokemon["id"].toString().padStart(dexDigits, "0");
+        const prettyName = getPrettyName(pokemon["name"]);
+        const displayName = `#${dexString} ${prettyName}`;
+
+        pokemonNameList[i] = displayName;
+
+        const option = document.createElement("option");
+        option.value = displayName;
+        datalist_name.appendChild(option);
+    }
+}
+
 function generate() {
-    currentPokemon = selectionPool[randInt(selectionPool.length)];
+    updateFilterPool();
+
+    currentPokemon = selectionPool[filterPool[randInt(filterPool.length)]];
 
     currentGender = decideGender();
-    //gender_checkbox.checked = currentGender != Genders.FEMALE;
-    //gender_checkbox.indeterminate = currentGender == Genders.GENDERLESS; // Not yet! Do this in setPokemon when sprite is being set
     shiny_checkbox.checked = decideShiny();
 
     setPokemon();
+}
+
+function updateFilterPool() {
+    filterPool = fullFilterPool;
+
+    const pokemonNameListIdx = pokemonNameList.indexOf(input_name.value);
+    if (pokemonNameListIdx > -1) {
+        filterPool = [pokemonNameListIdx];
+    }
 }
 
 function randInt(max) {
@@ -560,8 +601,14 @@ function switchGender() {
 
 // -------------------- Event handlers -------------------- //
 
+input_name.addEventListener("input", () => {
+    if (pokemonNameList.indexOf(input_name.value) > -1) {
+        generate();
+    }
+});
+
 sprite_source_dropdown.addEventListener("change", setSprite);
 
 shiny_checkbox.addEventListener("change", () => {
     setSprite();
-})
+});

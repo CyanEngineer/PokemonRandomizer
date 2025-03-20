@@ -2,7 +2,7 @@
 A tool for selecting a random Pokémon.
 
 ## Game plan
-I guess we can allow the user to just select a Pokémon too...
+~~I guess we can allow the user to just select a Pokémon too...~~
 
 ### Filtering
 Based on
@@ -23,8 +23,8 @@ Based on
   - Choose a backup source if preferred doesn't exist
 - ~~Gender chance (I forgot to query has_gender_differences)~~
 - ~~Shiny chance~~
-- Link to Bulbapedia images archive for pokemon
-- Have standard sprite-container size and allow resize?
+- ~~Link to Bulbapedia images archive for pokemon~~
+- ~~Have standard sprite-container size and allow resize?~~
 
 ### Linked list (history)?
 

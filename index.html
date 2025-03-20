@@ -7,6 +7,18 @@
     </head>
 
     <body>
+        <aside>
+            <h2>Filters</h2>
+            <form>
+                <span class="clearable_input">
+                    <input id=input_name list="datalist_name" type="text">
+                    <input type="reset" value="X">
+                </span>
+            </form>
+            <datalist id="datalist_name">
+                <!-- Filled by JS -->
+            </datalist>
+        </aside>
         <main>
             <button class="generage_button" onclick="generate()">
                 Generate!
@@ -98,7 +110,7 @@
             </div>
         </main>
         <aside>
-            <h2>Filter stuff</h2>
+            <h2>External links</h2>
         </aside>
     </body>
 
