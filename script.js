@@ -40,6 +40,7 @@ const Genders = Object.freeze({
 const nameCorrections = {
     "Nidoran F": "Nidoran♀",
     "Nidoran M": "Nidoran♂",
+    "Ho Oh": "Ho-Oh",
     "Jangmo O": "Jangmo-o",
     "Hakamo O": "Hakamo-o",
     "Kommo O": "Kommo-o",
@@ -66,6 +67,7 @@ async function setup() {
     fetch("types.json")
         .then(async response => {
             if (!response.ok) {
+                console.log("We got an error:");
                 console.log(response);
                 //TODO: Handle
             } else {
@@ -121,6 +123,7 @@ async function setup() {
     })
         .then(async response => {
             if (!response.ok) {
+                console.log("We got an error:");
                 console.log(response);
                 //TODO: Handle
             } else {
@@ -483,21 +486,23 @@ function setTypes() {
 }
 
 function setLinks() {
-    const bulbaName = getPrettyName(currentPokemon['name']).replaceAll(" ", "_");
-    var serebiiName = currentPokemon['name'];
-    if (!(serebiiName in ["jangmo-o", "hakamo-o", "komma-o", "wo-chien", "chien-pao", "ting-lu", "chi-yu"])) {
+    const name = currentPokemon['name'];
+    const prettyName = getPrettyName(name);
+
+    const bulbaName = prettyName.replaceAll(" ", "_");
+    var serebiiName = name;
+    if (!(serebiiName in ["ho-oh", "jangmo-o", "hakamo-o", "komma-o", "wo-chien", "chien-pao", "ting-lu", "chi-yu"])) {
         serebiiName = serebiiName.replace("-", "").replace("typenull", "type:null");
     }
-    const xResourceName = {"nidoran-f": "%23029 - nidoran♀", "nidoran-m": "%23032 - nidoran♂"}[currentPokemon['name']] ?? currentPokemon['name'];
 
     link_pokedex.href = `https://www.pokemon.com/us/pokedex/${currentPokemon['id']}`;
     link_bulba_wiki.href = `https://bulbapedia.bulbagarden.net/wiki/${bulbaName}_(Pokémon)`;
     link_bulba_archive.href = `https://archives.bulbagarden.net/wiki/Category:${bulbaName}`;
-    link_serebii.href = `https://serebii.net/pokemon/${serebiiName}/`; //nidoranf, type:null, jangmo-o, tapulele
+    link_serebii.href = `https://serebii.net/pokemon/${serebiiName}/`;
     link_serebii_cards.href = `https://www.serebii.net/card/dex/${currentPokemon['id'].toString().padStart(3, "0")}.shtml`;
-    link_pokemondb.href = `https://pokemondb.net/pokedex/${currentPokemon['name']}`;
-    link_spriters_resource.href = `https://www.spriters-resource.com/search/?q="${xResourceName}"`
-    link_models_resource.href = `https://www.models-resource.com/search/?q="${xResourceName}"`
+    link_pokemondb.href = `https://pokemondb.net/pokedex/${name}`;
+    link_spriters_resource.href = `https://www.spriters-resource.com/search/?q="${prettyName.split("-")[0]}"`
+    link_models_resource.href = `https://www.models-resource.com/search/?q="${prettyName.split("-")[0]}"`
 }
 
 function setAlternateForms() {

@@ -18,7 +18,7 @@ Based on
 
 ### Sprite selection
 - Choose a sprite to display out of the sprites available in PokéAPI
-  - Choose a preferred sprite source
+  - ~~Choose a preferred sprite source~~
     - ~~Disable sprite sources without the sprite~~
   - Choose a backup source if preferred doesn't exist
 - ~~Gender chance (I forgot to query has_gender_differences)~~
@@ -73,6 +73,7 @@ Based on
     - ~~Minior meteor colors~~
   - Arceus + Silvally types
   - Stellar type??
+  - Ho-Oh on Models Resource lol
 
 ### Stuff I should report
 - Frillish + Jellicent have forms that shouldn't be there (probably for females)
