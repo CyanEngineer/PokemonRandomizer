@@ -17,10 +17,9 @@ Based on
 - Try to see if I can postpone displaying until all images are loaded (form border too)
 
 ### Sprite selection
-- Choose a sprite to display out of the sprites available in PokéAPI
+- ~~Choose a sprite to display out of the sprites available in PokéAPI~~
   - ~~Choose a preferred sprite source~~
     - ~~Disable sprite sources without the sprite~~
-  - Choose a backup source if preferred doesn't exist
 - ~~Gender chance (I forgot to query has_gender_differences)~~
 - ~~Shiny chance~~
 - ~~Link to Bulbapedia images archive for pokemon~~
@@ -29,9 +28,6 @@ Based on
 ### Linked list (history)?
 
 ### Other todos
-- Indeterminate issues
-  - Something with Politoed
-  - Something with Arbok
 - Arceus and Silvally types are only in pokemon_v2_pokemonformtypes (except for normal)
 - Handle missing images
 - Dream World doesn't have shinies
@@ -53,13 +49,16 @@ Based on
       - ~~Basculegion~~
     - Single-gendered variations
       - Pikachu (Do I care enough to fix this?)
-    - Gender differences were added in gen IV
-    - I guess I made available artwork sources dependent on gender...
-  - Forms missing sprites
+    - Gender differences were added in gen IV (so Gen I-III games don't have them)
+    - ~~I guess I made available artwork sources dependent on gender...~~
+  - Forms without official sprites
     - Unown
     - Broken Mimikyu
     - Arceus
     - Silvally
+    - Squawkabilly
+    - Vivillon
+    - Alcremie
   - ~~Ignore forms:~~
     - ~~Totem Pokemon~~
     - ~~Mothim~~
@@ -72,12 +71,10 @@ Based on
     - ~~Zygarde Power Construct~~
     - ~~Minior meteor colors~~
   - Arceus + Silvally types
-  - Stellar type??
-  - Ho-Oh on Models Resource lol
+  - ~~Ho-Oh on Models Resource lol~~
 
 ### Stuff I should report
 - Frillish + Jellicent have forms that shouldn't be there (probably for females)
-- Ogerpon form sprites are misaligned
 - No Showdown gen 9 sprites
 - Incorrect gender rate
   - Fezandipiti
@@ -92,7 +89,7 @@ Based on
   - Floette + Florges
   - Cherrim 
   - Unown (all sources)
-  - Shellos (+ Gastrodon?)
+  - Shellos + Gastrodon
   - Squawkabilly (blue, yellow and white "official art" are 3D)
   - Burmy (not Wormadam)
   - Flabebe + Floette
@@ -103,7 +100,6 @@ Based on
   - Alcremie
   - PokeAPI Zygarde 10 (it exists in power construct)
 - Bad sprites
-  - Official Shiny Ancient misdreavous
   - Showdown Hisuian Electrode
 - Arceus + Silvally
   - Types are only in pokemon_v2_pokemonformtypes (except normal)

@@ -535,6 +535,13 @@ function setLinks() {
     if (!(serebiiName in ["ho-oh", "jangmo-o", "hakamo-o", "komma-o", "wo-chien", "chien-pao", "ting-lu", "chi-yu"])) {
         serebiiName = serebiiName.replace("-", "").replace("typenull", "type:null");
     }
+    
+    var xResourceName;
+    if (prettyName == "Ho-Oh") { // Ho-Oh is the only name that gives no results with exact match...
+        xResourceName = "Ho";
+    } else {
+        xResourceName = `"${prettyName}"`;
+    }
 
     link_pokedex.href = `https://www.pokemon.com/us/pokedex/${currentPokemon['id']}`;
     link_bulba_wiki.href = `https://bulbapedia.bulbagarden.net/wiki/${bulbaName}_(Pokémon)`;
@@ -542,8 +549,8 @@ function setLinks() {
     link_serebii.href = `https://serebii.net/pokemon/${serebiiName}/`;
     link_serebii_cards.href = `https://www.serebii.net/card/dex/${currentPokemon['id'].toString().padStart(3, "0")}.shtml`;
     link_pokemondb.href = `https://pokemondb.net/pokedex/${name}`;
-    link_spriters_resource.href = `https://www.spriters-resource.com/search/?q="${prettyName.split("-")[0]}"`
-    link_models_resource.href = `https://www.models-resource.com/search/?q="${prettyName.split("-")[0]}"`
+    link_spriters_resource.href = `https://www.spriters-resource.com/search/?q=${xResourceName}`;
+    link_models_resource.href = `https://www.models-resource.com/search/?q=${xResourceName}`;
 }
 
 function setAlternateForms() {
