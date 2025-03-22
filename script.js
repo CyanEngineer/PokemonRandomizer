@@ -33,10 +33,11 @@ const shiny_chance = document.getElementById("shiny_chance");
 // External links elements
 const link_pokedex = document.getElementById("link_pokedex");
 const link_bulba_wiki = document.getElementById("link_bulba_wiki");
-const link_bulba_archive = document.getElementById("link_bulba_archive");
 const link_serebii = document.getElementById("link_serebii");
-const link_serebii_cards = document.getElementById("link_serebii_cards");
 const link_pokemondb = document.getElementById("link_pokemondb");
+const link_serebii_tcg = document.getElementById("link_serebii_tcg");
+const link_bulba_tcg = document.getElementById("link_bulba_tcg");
+const link_bulba_archive = document.getElementById("link_bulba_archive");
 const link_spriters_resource = document.getElementById("link_spriters_resource");
 const link_models_resource = document.getElementById("link_models_resource");
 
@@ -547,7 +548,8 @@ function setLinks() {
     link_bulba_wiki.href = `https://bulbapedia.bulbagarden.net/wiki/${bulbaName}_(Pokémon)`;
     link_bulba_archive.href = `https://archives.bulbagarden.net/wiki/Category:${bulbaName}`;
     link_serebii.href = `https://serebii.net/pokemon/${serebiiName}/`;
-    link_serebii_cards.href = `https://www.serebii.net/card/dex/${currentPokemon['id'].toString().padStart(3, "0")}.shtml`;
+    link_serebii_tcg.href = `https://www.serebii.net/card/dex/${currentPokemon['id'].toString().padStart(3, "0")}.shtml`;
+    link_bulba_tcg.href = `https://bulbapedia.bulbagarden.net/wiki/${bulbaName}_(TCG)`;
     link_pokemondb.href = `https://pokemondb.net/pokedex/${name}`;
     link_spriters_resource.href = `https://www.spriters-resource.com/search/?q=${xResourceName}`;
     link_models_resource.href = `https://www.models-resource.com/search/?q=${xResourceName}`;
