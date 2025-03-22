@@ -1,6 +1,5 @@
-var json;
+var pokemonJson;
 var types;
-var selectionPool;
 var fullFilterPool;
 var filterPool;
 
@@ -138,15 +137,16 @@ async function setup() {
                 //TODO: Handle
             } else {
                 const res = await response.json();
-                json = res["data"]["species"];
-                selectionPool = json;
-                fullFilterPool = [...Array(selectionPool.length).keys()];
+                pokemonJson = res["data"]["species"];
+                fullFilterPool = [...Array(pokemonJson.length).keys()];
                 filterPool = fullFilterPool;
-                console.log(json) //TODO: Delete this
             }
         });
     
     modJson();
+
+    console.log("Pokemon JSON:");
+    console.log(pokemonJson);
 
     populateDataList();
     
@@ -155,27 +155,32 @@ async function setup() {
 
 // Make a few changes to the data
 function modJson() {
+    // Inject pretty_name
+    for (pokemon of pokemonJson) {
+        pokemon["pretty_name"] = getPrettyName(pokemon["name"]);
+    }
+
     // Remove Totem forms
-    json[19]["pokemon_v2_pokemons"].splice(2); // Raticate
-    json[104]["pokemon_v2_pokemons"].splice(2); // Marowak
-    json[734]["pokemon_v2_pokemons"].splice(1); // Gumshoos
-    json[737]["pokemon_v2_pokemons"].splice(1); // Vikavolt
-    json[742]["pokemon_v2_pokemons"].splice(1); // Ribombee
-    json[751]["pokemon_v2_pokemons"].splice(1); // Araquanid
-    json[753]["pokemon_v2_pokemons"].splice(1); // Lurantis
-    json[757]["pokemon_v2_pokemons"].splice(1); // Salazzle
-    json[776]["pokemon_v2_pokemons"].splice(1); // Togedemaru
-    json[777]["pokemon_v2_pokemons"].splice(2); // Mimikyu
-    json[783]["pokemon_v2_pokemons"].splice(1); // Kommo-o
+    pokemonJson[19]["pokemon_v2_pokemons"].splice(2); // Raticate
+    pokemonJson[104]["pokemon_v2_pokemons"].splice(2); // Marowak
+    pokemonJson[734]["pokemon_v2_pokemons"].splice(1); // Gumshoos
+    pokemonJson[737]["pokemon_v2_pokemons"].splice(1); // Vikavolt
+    pokemonJson[742]["pokemon_v2_pokemons"].splice(1); // Ribombee
+    pokemonJson[751]["pokemon_v2_pokemons"].splice(1); // Araquanid
+    pokemonJson[753]["pokemon_v2_pokemons"].splice(1); // Lurantis
+    pokemonJson[757]["pokemon_v2_pokemons"].splice(1); // Salazzle
+    pokemonJson[776]["pokemon_v2_pokemons"].splice(1); // Togedemaru
+    pokemonJson[777]["pokemon_v2_pokemons"].splice(2); // Mimikyu
+    pokemonJson[783]["pokemon_v2_pokemons"].splice(1); // Kommo-o
 
     // Merge Pokemon where genders are sperate forms
     const offenders = [677, 875, 901, 915] // Meowstic, Indeedee, Basculegion, Oinkologne
     for (const offender of offenders) {
-        const name = json[offender]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["name"];
-        json[offender]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["name"] = name.replace("-male", "");
-        json[offender]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["form_name"] = "";
-        const sprites1 = json[offender]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["pokemon_v2_pokemon"]["pokemon_v2_pokemonsprites"][0]["sprites"];
-        const sprites2 = json[offender]["pokemon_v2_pokemons"][1]["pokemon_v2_pokemonforms"][0]["pokemon_v2_pokemon"]["pokemon_v2_pokemonsprites"][0]["sprites"];
+        const name = pokemonJson[offender]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["name"];
+        pokemonJson[offender]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["name"] = name.replace("-male", "");
+        pokemonJson[offender]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["form_name"] = "";
+        const sprites1 = pokemonJson[offender]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["pokemon_v2_pokemon"]["pokemon_v2_pokemonsprites"][0]["sprites"];
+        const sprites2 = pokemonJson[offender]["pokemon_v2_pokemons"][1]["pokemon_v2_pokemonforms"][0]["pokemon_v2_pokemon"]["pokemon_v2_pokemonsprites"][0]["sprites"];
         
         sprites1["front_female"] = sprites2["front_default"];
         sprites1["front_shiny_female"] = sprites2["front_shiny"];
@@ -196,80 +201,89 @@ function modJson() {
         sprites1["versions"]["generation-vii"]["ultra-sun-ultra-moon"]["front_female"] = sprites2["versions"]["generation-vii"]["ultra-sun-ultra-moon"]["front_default"];
         sprites1["versions"]["generation-vii"]["ultra-sun-ultra-moon"]["front_shiny_female"] = sprites2["versions"]["generation-vii"]["ultra-sun-ultra-moon"]["front_shiny"];    
     
-        json[offender]["pokemon_v2_pokemons"].splice(1);
+        pokemonJson[offender]["pokemon_v2_pokemons"].splice(1);
     }
 
     // Remove forms without visual differences
-    json[413]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["name"] = "mothim";
-    json[413]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["form_name"] = "";
-    json[413]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"].splice(1);
+    pokemonJson[413]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["name"] = "mothim";
+    pokemonJson[413]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["form_name"] = "";
+    pokemonJson[413]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"].splice(1);
 
-    json[648]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"].splice(1); // Genesect
+    pokemonJson[648]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"].splice(1); // Genesect
 
-    json[663]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["name"] = "scatterbug";
-    json[663]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["form_name"] = "";
-    json[663]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"].splice(1);
+    pokemonJson[663]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["name"] = "scatterbug";
+    pokemonJson[663]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["form_name"] = "";
+    pokemonJson[663]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"].splice(1);
 
-    json[664]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["name"] = "spewpa";
-    json[664]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["form_name"] = "";
-    json[664]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"].splice(1);
+    pokemonJson[664]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["name"] = "spewpa";
+    pokemonJson[664]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["form_name"] = "";
+    pokemonJson[664]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"].splice(1);
 
-    json[709]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["name"] = "pumpkaboo";
-    json[709]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["form_name"] = "";
-    json[709]["pokemon_v2_pokemons"].splice(1);
+    pokemonJson[709]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["name"] = "pumpkaboo";
+    pokemonJson[709]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["form_name"] = "";
+    pokemonJson[709]["pokemon_v2_pokemons"].splice(1);
 
-    json[710]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["name"] = "gourgeist";
-    json[710]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["form_name"] = "";
-    json[710]["pokemon_v2_pokemons"].splice(1);
+    pokemonJson[710]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["name"] = "gourgeist";
+    pokemonJson[710]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["form_name"] = "";
+    pokemonJson[710]["pokemon_v2_pokemons"].splice(1);
 
-    json[715]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["name"] = "xerneas";
-    json[715]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["form_name"] = "";
-    json[715]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"].splice(1);
+    pokemonJson[715]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["name"] = "xerneas";
+    pokemonJson[715]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["form_name"] = "";
+    pokemonJson[715]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"].splice(1);
 
-    json[717]["pokemon_v2_pokemons"].splice(1, 2); // Zygarde
+    pokemonJson[717]["pokemon_v2_pokemons"].splice(1, 2); // Zygarde
 
-    json[773]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["name"] = "minior-meteor";
-    json[773]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["form_name"] = "meteor";
-    json[773]["pokemon_v2_pokemons"].splice(1, 6);
+    pokemonJson[773]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["name"] = "minior-meteor";
+    pokemonJson[773]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["form_name"] = "meteor";
+    pokemonJson[773]["pokemon_v2_pokemons"].splice(1, 6);
 
-    json[848]["pokemon_v2_pokemons"][2]["pokemon_v2_pokemonforms"][0]["name"] = "toxtricity-gmax";
-    json[848]["pokemon_v2_pokemons"].splice(3);
+    pokemonJson[848]["pokemon_v2_pokemons"][2]["pokemon_v2_pokemonforms"][0]["name"] = "toxtricity-gmax";
+    pokemonJson[848]["pokemon_v2_pokemons"].splice(3);
 
-    json[853]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["name"] = "sinistea";
-    json[853]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["form_name"] = "";
-    json[853]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"].splice(1);
+    pokemonJson[853]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["name"] = "sinistea";
+    pokemonJson[853]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["form_name"] = "";
+    pokemonJson[853]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"].splice(1);
 
-    json[854]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["name"] = "polteageist";
-    json[854]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["form_name"] = "";
-    json[854]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"].splice(1);
+    pokemonJson[854]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["name"] = "polteageist";
+    pokemonJson[854]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["form_name"] = "";
+    pokemonJson[854]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"].splice(1);
 
-    json[1006]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["name"] = "koraidon";
-    json[1006]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["form_name"] = "";
-    json[1006]["pokemon_v2_pokemons"].splice(1);
+    pokemonJson[1006]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["name"] = "koraidon";
+    pokemonJson[1006]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["form_name"] = "";
+    pokemonJson[1006]["pokemon_v2_pokemons"].splice(1);
 
-    json[1007]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["name"] = "miraidon";
-    json[1007]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["form_name"] = "";
-    json[1007]["pokemon_v2_pokemons"].splice(1);
+    pokemonJson[1007]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["name"] = "miraidon";
+    pokemonJson[1007]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["form_name"] = "";
+    pokemonJson[1007]["pokemon_v2_pokemons"].splice(1);
 
-    json[1011]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["name"] = "poltchageist";
-    json[1011]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["form_name"] = "";
-    json[1011]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"].splice(1);
+    pokemonJson[1011]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["name"] = "poltchageist";
+    pokemonJson[1011]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["form_name"] = "";
+    pokemonJson[1011]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"].splice(1);
 
-    json[1012]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["name"] = "sinistcha";
-    json[1012]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["form_name"] = "";
-    json[1012]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"].splice(1);
+    pokemonJson[1012]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["name"] = "sinistcha";
+    pokemonJson[1012]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["form_name"] = "";
+    pokemonJson[1012]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"].splice(1);
+}
+
+function getPrettyName(dataName) {
+    const pokemonNameParts = dataName.split("-");
+    for (let i = 0; i < pokemonNameParts.length; i++) {
+        pokemonNameParts[i] = capitalizeFirstLetter(pokemonNameParts[i]);
+    }
+    const pokemonName = pokemonNameParts.join(" ");
+
+    return nameCorrections[pokemonName] ?? pokemonName;
 }
 
 async function populateDataList() {
     
-    pokemonNameList = Array(selectionPool.length);
-    const dexDigits = Math.floor(Math.log10(json.length) + 1);
+    pokemonNameList = Array(pokemonJson.length);
+    const dexDigits = Math.floor(Math.log10(pokemonJson.length) + 1);
 
-    for (let i=0; i<selectionPool.length; i++) {
-        const pokemon = json[i];
+    for (let i=0; i<pokemonJson.length; i++) {
+        const pokemon = pokemonJson[i];
         const dexString = pokemon["id"].toString().padStart(dexDigits, "0");
-        const prettyName = getPrettyName(pokemon["name"]);
-        const displayName = `#${dexString} ${prettyName}`;
+        const displayName = `#${dexString} ${pokemon["pretty_name"]}`;
 
         pokemonNameList[i] = displayName;
 
@@ -282,7 +296,7 @@ async function populateDataList() {
 function generate() {
     updateFilterPool();
 
-    currentPokemon = selectionPool[filterPool[randInt(filterPool.length)]];
+    currentPokemon = pokemonJson[filterPool[randInt(filterPool.length)]];
 
     currentGender = decideGender();
     shiny_checkbox.checked = decideShiny();
@@ -294,8 +308,15 @@ function updateFilterPool() {
     filterPool = fullFilterPool;
 
     const pokemonNameListIdx = pokemonNameList.indexOf(input_name.value);
-    if (pokemonNameListIdx > -1) {
+    if (pokemonNameListIdx > -1) { // User has specified a specific pokemon
         filterPool = [pokemonNameListIdx];
+        return;
+    } else {
+        const searchString = input_name.value.toLowerCase();
+        filterPool = filterPool.filter((dexNumber) => (pokemonJson[dexNumber]['pretty_name'].toLowerCase().includes(searchString)));
+
+        console.log("Dex numbers passing filter:");
+        console.log(filterPool);
     }
 }
 
@@ -458,13 +479,13 @@ function checkSpriteSources() {
 }
 
 function setName() {
-    const dexDigits = Math.floor(Math.log10(json.length) + 1);
+    const dexDigits = Math.floor(Math.log10(pokemonJson.length) + 1);
     const dexString = currentPokemon["id"].toString().padStart(dexDigits, "0");
 
     var fullName;
 
     // In case of two-word names
-    const pokemonPrettyName = getPrettyName(currentPokemon["name"]);
+    const prettyName = currentPokemon["pretty_name"];
 
     const pokemonVariant = getVariant(currentFormIdx, currentVariantIdx);
     const formNameParts = pokemonVariant["form_name"].split("-");
@@ -474,46 +495,36 @@ function setName() {
     }
 
     if (formNameParts.length == 0) {
-        fullName = pokemonPrettyName;
+        fullName = prettyName;
     } else if (formNameParts.length == 1) {
-        if (pokemonPrettyName == "Unown") {
-            fullName = pokemonPrettyName + " " + formNameParts[0];
-        } else if ((pokemonPrettyName == "Shellos") || (pokemonPrettyName == "Gastrodon")) {
-            fullName = formNameParts[0] + " Sea " + pokemonPrettyName;
-        } else if (pokemonPrettyName == "Shaymin") {
-            fullName = formNameParts[0] + " Forme " + pokemonPrettyName;
-        } else if (pokemonPrettyName == "Zygarde") {
+        if (prettyName == "Unown") {
+            fullName = prettyName + " " + formNameParts[0];
+        } else if ((prettyName == "Shellos") || (prettyName == "Gastrodon")) {
+            fullName = formNameParts[0] + " Sea " + prettyName;
+        } else if (prettyName == "Shaymin") {
+            fullName = formNameParts[0] + " Forme " + prettyName;
+        } else if (prettyName == "Zygarde") {
             if (formNameParts[0] == "Complete") {
-                fullName = pokemonPrettyName + " " + formNameParts[0] + " Forme"
+                fullName = prettyName + " " + formNameParts[0] + " Forme"
             } else {
-                fullName = pokemonPrettyName + " " + formNameParts[0] + "% Forme"
+                fullName = prettyName + " " + formNameParts[0] + "% Forme"
             }
         } else {
-            fullName = formNameParts[0] + " " + pokemonPrettyName;
+            fullName = formNameParts[0] + " " + prettyName;
         }
     } else {
         if ((formNameParts[0] == "Mega") && 
             ((formNameParts[1] == "X") ||
              (formNameParts[1] == "Y"))) { // "X"/"Y" comes after the pokemon name
-            fullName = formNameParts[0] + " " + pokemonPrettyName + " " + formNameParts[1];
-        } else if ((pokemonPrettyName == "Tauros") && (formNameParts[0] == "Paldean")) {
-            fullName = formNameParts[1] + " " + formNameParts[2] + " " + formNameParts[0] + pokemonPrettyName;
+            fullName = formNameParts[0] + " " + prettyName + " " + formNameParts[1];
+        } else if ((prettyName == "Tauros") && (formNameParts[0] == "Paldean")) {
+            fullName = formNameParts[1] + " " + formNameParts[2] + " " + formNameParts[0] + prettyName;
         } else {
-            fullName = formNameParts.join(" ") + " " + pokemonPrettyName;
+            fullName = formNameParts.join(" ") + " " + prettyName;
         }
     }
 
     pokemon_name.innerHTML = "#" + dexString + " " + fullName;
-}
-
-function getPrettyName(dataName) {
-    const pokemonNameParts = dataName.split("-");
-    for (let i = 0; i < pokemonNameParts.length; i++) {
-        pokemonNameParts[i] = capitalizeFirstLetter(pokemonNameParts[i]);
-    }
-    const pokemonName = pokemonNameParts.join(" ");
-
-    return nameCorrections[pokemonName] ?? pokemonName;
 }
 
 function setTypes() {
@@ -529,11 +540,11 @@ function setTypes() {
 
 function setLinks() {
     const name = currentPokemon['name'];
-    const prettyName = getPrettyName(name);
+    const prettyName = currentPokemon['pretty_name'];
 
     const bulbaName = prettyName.replaceAll(" ", "_");
     var serebiiName = name;
-    if (!(serebiiName in ["ho-oh", "jangmo-o", "hakamo-o", "komma-o", "wo-chien", "chien-pao", "ting-lu", "chi-yu"])) {
+    if (!(["ho-oh", "jangmo-o", "hakamo-o", "komma-o", "wo-chien", "chien-pao", "ting-lu", "chi-yu"].includes(serebiiName))) {
         serebiiName = serebiiName.replace("-", "").replace("typenull", "type:null");
     }
     
