@@ -1,5 +1,5 @@
 var pokemonJson;
-var types;
+var typesJson;
 var fullFilterPool;
 var filterPool;
 
@@ -72,21 +72,60 @@ const formCorrections = {
 setup();
 
 async function setup() {
-
-    fetch("types.json")
+    // Fetch pokemon types
+    fetch("https://beta.pokeapi.co/graphql/v1beta", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            query: `query pokeAPIquery {
+                types: pokemon_v2_type(
+                    where: {
+                        _and: [ 
+                            {_not: {name: {_eq: "stellar"}}},
+                            {_not: {name: {_eq: "unknown"}}},
+                            {_not: {name: {_eq: "shadow"}}}
+                        ]
+                    }
+                ) {
+                    id
+                    name
+                    pokemonV2TypeefficaciesByTargetTypeId {
+                        damage_factor
+                        pokemon_v2_type {
+                            name
+                        }
+                    }
+                }
+            }
+            `
+        })
+    })
         .then(async response => {
             if (!response.ok) {
-                console.log("We got an error:");
+                console.log("An error occurred while fetching pokemon types");
                 console.log(response);
-                //TODO: Handle
             } else {
                 const res = await response.json();
-                types = res;
+                const types = res['data']['types'];
+                typesJson = {};
+                for (const type of types) {
+                    const efficacies = {};
+                    for (const attackingType of type['pokemonV2TypeefficaciesByTargetTypeId']) {
+                        efficacies[attackingType['pokemon_v2_type']['name']] = attackingType['damage_factor'];
+                    }
+                    typesJson[type['name']] = {
+                        'icon': `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-ix/scarlet-violet/${type['id']}.png`,
+                        'efficacies': efficacies
+                    }
+                }
             }
         });
 
+    // fetch pokemon
     await fetch("https://beta.pokeapi.co/graphql/v1beta", {
-        method: 'POST',
+        method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
@@ -145,6 +184,9 @@ async function setup() {
     
     modJson();
 
+    console.log("Types JSON:");
+    console.log(typesJson);
+    
     console.log("Pokemon JSON:");
     console.log(pokemonJson);
 
@@ -533,7 +575,7 @@ function setTypes() {
     for (const type of pokemonTypes) {
         const typeName = type["pokemon_v2_type"]["name"]
         const type_img = document.createElement("img");
-        type_img.src = types[typeName];
+        type_img.src = typesJson[typeName]['icon'];
         types_container.appendChild(type_img);
     }
 }
