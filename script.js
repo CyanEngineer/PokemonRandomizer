@@ -13,6 +13,9 @@ var currentVariantIdx;
 var fullFilterPool;
 var filterPool;
 
+var allGens;
+var validGens;
+
 var validNTypes
 var allTypes;
 var validTypes;
@@ -22,6 +25,10 @@ var pokemonNameList;
 // Filters elements
 const input_name = document.getElementById("input_name");
 const datalist_name = document.getElementById("datalist_name");
+
+const gen_grid = document.getElementById("gen_grid");
+const button_all_gens = document.getElementById("button_all_gens");
+const button_no_gens = document.getElementById("button_no_gens");
 
 const checkbox_single_type = document.getElementById("checkbox_single_type");
 const checkbox_dual_type = document.getElementById("checkbox_dual_type");
@@ -85,8 +92,6 @@ const formCorrections = {
     "Paldea": "Paldean"
 }
 
-console.log('hello');
-
 resetFilters();
 
 setup();
@@ -99,6 +104,62 @@ function resetFilters() {
 }
 
 async function setup() {
+    // fetch pokemon
+    await fetch("https://beta.pokeapi.co/graphql/v1beta", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            query: `query pokeAPIquery {
+                species: pokemon_v2_pokemonspecies(order_by: {id: asc}) {
+                    id
+                    name
+                    gender_rate
+                    is_baby
+                    is_legendary
+                    is_mythical
+                    pokemon_v2_evolutionchain {
+                        pokemon_v2_pokemonspecies(order_by: {id: asc}) {
+                            id
+                            name
+                            evolves_from_species_id
+                        }
+                    }
+                    pokemon_v2_pokemons {
+                        pokemon_v2_pokemonforms {
+                            name
+                            form_name
+                            pokemon_v2_versiongroup {
+                                generation_id
+                            }
+                            pokemon_v2_pokemon {
+                                pokemon_v2_pokemonsprites {
+                                    sprites
+                                }
+                            }
+                        }
+                        pokemon_v2_pokemontypes {
+                            pokemon_v2_type {
+                                name
+                            }
+                        }
+                    }
+                }
+            }`
+        })
+    })
+        .then(async response => {
+            if (!response.ok) {
+                console.log("We got an error:");
+                console.log(response);
+                //TODO: Handle
+            } else {
+                const res = await response.json();
+                pokemonJson = res["data"]["species"];
+            }
+        });
+    
     // Fetch pokemon types
     await fetch("https://beta.pokeapi.co/graphql/v1beta", {
         method: "POST",
@@ -147,74 +208,10 @@ async function setup() {
                         'efficacies': efficacies
                     }
                 }
-
-                allTypes = new Set(Object.keys(typesJson));
-                validTypes = new Set(allTypes);
-
-                populatePokemonTypes();
             }
         });
 
-    // fetch pokemon
-    await fetch("https://beta.pokeapi.co/graphql/v1beta", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            query: `query pokeAPIquery {
-                species: pokemon_v2_pokemonspecies(order_by: {id: asc}) {
-                    id
-                    name
-                    gender_rate
-                    is_baby
-                    is_legendary
-                    is_mythical
-                    pokemon_v2_evolutionchain {
-                        pokemon_v2_pokemonspecies(order_by: {id: asc}) {
-                            id
-                            name
-                            evolves_from_species_id
-                        }
-                    }
-                    pokemon_v2_generation {
-                        id
-                        name
-                    }
-                    pokemon_v2_pokemons {
-                        pokemon_v2_pokemonforms {
-                            name
-                            form_name
-                            pokemon_v2_pokemon {
-                                pokemon_v2_pokemonsprites {
-                                    sprites
-                                }
-                            }
-                        }
-                        pokemon_v2_pokemontypes {
-                            pokemon_v2_type {
-                                name
-                            }
-                        }
-                    }
-                }
-            }`
-        })
-    })
-        .then(async response => {
-            if (!response.ok) {
-                console.log("We got an error:");
-                console.log(response);
-                //TODO: Handle
-            } else {
-                const res = await response.json();
-                pokemonJson = res["data"]["species"];
-                fullFilterPool = [...Array(pokemonJson.length).keys()];
-                filterPool = fullFilterPool;
-            }
-        });
-    
-    modJson();
+    modPokemonJson();
 
     console.log("Types JSON:");
     console.log(typesJson);
@@ -222,13 +219,26 @@ async function setup() {
     console.log("Pokemon JSON:");
     console.log(pokemonJson);
 
+    // Set up filters
+    fullFilterPool = [...Array(pokemonJson.length).keys()];
+    filterPool = fullFilterPool;
+
+    const nGens = pokemonJson[pokemonJson.length - 1]['pokemon_v2_pokemons'][0]['pokemon_v2_pokemonforms'][0]['pokemon_v2_versiongroup']['generation_id'];
+    allGens = new Set(Array.from({length: nGens}, (_, i) => i+1));
+    validGens = new Set(allGens);
+
+    allTypes = new Set(Object.keys(typesJson));
+    validTypes = new Set(allTypes);
+
     populateDataList();
+    populateGenGrid();
+    populateTypeGrid();
     
     generate();
 }
 
 // Make a few changes to the data
-function modJson() {
+function modPokemonJson() {
     // Inject pretty_name
     for (pokemon of pokemonJson) {
         pokemon["pretty_name"] = getPrettyName(pokemon["name"]);
@@ -367,7 +377,40 @@ async function populateDataList() {
     }
 }
 
-async function populatePokemonTypes() {
+async function populateGenGrid() {
+    
+    for (let i=1; i<=allGens.size; i++) {
+        const gen_checkbox = document.createElement("div");
+        gen_checkbox.classList = ["gen_checkbox"];
+
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        const id = `checkbox_gen_${i}`;
+        checkbox.id = id;
+        checkbox.value = i;
+        checkbox.onclick = () => toggleGeneration(checkbox);
+        checkbox.checked = true;
+        gen_checkbox.appendChild(checkbox);
+
+        const label = document.createElement("label");
+        label.htmlFor = id;
+        label.innerHTML = `Generation ${i}`;
+        gen_checkbox.appendChild(label);
+
+        gen_grid.appendChild(gen_checkbox);
+    }
+}
+
+function toggleGeneration(checkbox) {
+
+    if (checkbox.checked) {
+        validGens.add(Number(checkbox.value));
+    } else {
+        validGens.delete(Number(checkbox.value));
+    }
+}
+
+async function populateTypeGrid() {
     for (type of Object.entries(typesJson)) {
         const typeName = type[0];
 
@@ -444,8 +487,8 @@ function updateFilterPool() {
             validNTypes = [2];
         }
 
-        if((validNTypes.length < 2) || (validTypes.size != allTypes.size)) {
-            filterPool = filterPool.filter((dexIdx) => formsWithValidTyping(pokemonJson[dexIdx]['pokemon_v2_pokemons']).length > 0);
+        if((validGens.size != allGens.size) || (validNTypes.length < 2) || (validTypes.size != allTypes.size)) {
+            filterPool = filterPool.filter((dexIdx) => getValidForms(pokemonJson[dexIdx]['pokemon_v2_pokemons']).length > 0);
         }
 
         console.log("Dex indices passing filter (add 1 for dex number):");
@@ -453,10 +496,17 @@ function updateFilterPool() {
     }
 }
 
-function formsWithValidTyping(pokemonForms) {
+function getValidForms(pokemonForms) {
 
     var validFormIndices = [...Array(pokemonForms.length).keys()];
 
+    // Generation filter
+    if (validGens.size != allGens.size) {
+        validFormIndices = validFormIndices.filter((formIdx) =>
+            validGens.has(pokemonForms[formIdx]['pokemon_v2_pokemonforms'][0]['pokemon_v2_versiongroup']['generation_id']));
+    }
+
+    // Types filter
     if (radio_one_type.checked) {
         validFormIndices = validFormIndices.filter((formIdx) => 
             validNTypes.includes(pokemonForms[formIdx]['pokemon_v2_pokemontypes'].length) && 
@@ -545,7 +595,7 @@ function setPokemon(formIdx=-1, variantIdx=-1) {
 
 function selectFormIdx(pokemonForms) {
     //TODO: Implement selection filtering
-    const validFormIndices = formsWithValidTyping(pokemonForms);
+    const validFormIndices = getValidForms(pokemonForms);
     const idxIdx = randInt(validFormIndices.length);
     return validFormIndices[idxIdx];
 }
@@ -805,6 +855,24 @@ radio_two_types.addEventListener("click", () => {
     if (radio_two_types.checked) {
         checkbox_single_type.disabled = true;
         checkbox_dual_type.disabled = true;
+    }
+});
+
+button_all_gens.addEventListener("click", () => {
+    const checkboxes = document.querySelectorAll(".gen_checkbox input");
+    for (const checkbox of checkboxes) {
+        if (!checkbox.checked) {
+            checkbox.click();
+        }
+    }
+});
+
+button_no_gens.addEventListener("click", () => {
+    const checkboxes = document.querySelectorAll(".gen_checkbox input");
+    for (const checkbox of checkboxes) {
+        if (checkbox.checked) {
+            checkbox.click();
+        }
     }
 });
 

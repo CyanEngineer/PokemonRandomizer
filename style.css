@@ -44,7 +44,7 @@ input[type="reset"] {
 	cursor: pointer;
 }
 
-.type_grid {
+.grid {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 }

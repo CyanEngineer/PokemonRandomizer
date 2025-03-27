@@ -7,7 +7,7 @@ A tool for selecting a random Pokémon.
 ### Filtering
 Based on
 - ~~Name~~
-- Generation
+- ~~Generation~~
 - ~~Type~~
 - Type efficacy???
 - Not fully evolved
@@ -41,7 +41,7 @@ Make sure it is handled when no pokemon match filters
 - ~~Link to other resources (Bulbapedia, Bulbapedia img archive, Pokemondb, Official Pokedex)~~
 - Maybe Home sprite for form list? Official is missing 27 Unown and Broken Mimikyu (look for more examples)
 - Edge cases
-  - ~~Naming~~
+  - Naming
     - ~~Zygarde add "%"~~
     - ~~Nidoran use gender symbols~~
     - ~~Jangemo-o + Hakamo-o + Kommo-o~~
@@ -49,6 +49,7 @@ Make sure it is handled when no pokemon match filters
     - ~~X Shaymin -> X Forme Shaymin~~
     - ~~Paldea X Breed Tauros -> X Breed Paldean Tauros~~
     - ~~Flabebe -> Flabébé~~
+    - Gmax Urshifu has same name for both versions
   - Gender
     - ~~Separate forms~~
       - ~~Oinkologne~~
@@ -66,7 +67,7 @@ Make sure it is handled when no pokemon match filters
     - Squawkabilly
     - Vivillon
     - Alcremie
-  - ~~Ignore forms:~~
+  - Ignore forms:
     - ~~Totem Pokemon~~
     - ~~Mothim~~
     - ~~Pompkaboo + Gourgeist~~
@@ -77,6 +78,7 @@ Make sure it is handled when no pokemon match filters
     - ~~Xerneas~~
     - ~~Zygarde Power Construct~~
     - ~~Minior meteor colors~~
+    - Own Tempo Rockruff
   - Arceus + Silvally types
   - ~~Ho-Oh on Models Resource lol~~
 

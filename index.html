@@ -24,6 +24,17 @@
             </fieldset>
 
             <fieldset>
+                <legend>Introduced generation</legend>
+                <div id="gen_grid" class="grid">
+                    <!-- Filled by JS -->
+                </div>
+                <div class="row">
+                    <button id="button_all_gens">Select all</button>
+                    <button id="button_no_gens">Deselect all</button>
+                </div>
+            </fieldset>
+
+            <fieldset>
                 <legend>Pokemon types</legend>
                 <label>Number of Pokemon types:</label>
                 <div class="row">
@@ -39,7 +50,7 @@
                     <input type="radio" id="radio_two_types" name="radio_n_matching_types">
                     <label for="radio_two_types">Two</label>
                 </div>
-                <div id="type_grid" class="type_grid">
+                <div id="type_grid" class="grid">
                     <!-- Filled by JS -->
                 </div>
                 <div class="row">
