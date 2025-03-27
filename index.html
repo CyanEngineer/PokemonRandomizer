@@ -9,17 +9,44 @@
     <body>
         <aside>
             <h2>Filters</h2>
-            <h3>Pokemon name</h3>
-            <form>
-                <span class="clearable_input">
-                    <input id=input_name list="datalist_name" type="text">
-                    <input type="reset" value="X">
-                </span>
-            </form>
-            <datalist id="datalist_name">
-                <!-- Filled by JS -->
-            </datalist>
+            <fieldset>
+                <legend>Pokemon name</legend>
+                <form>
+                    Full/partial name: 
+                    <span class="clearable_input">
+                        <input id=input_name list="datalist_name" type="text">
+                        <input type="reset" value="X">
+                    </span>
+                </form>
+                <datalist id="datalist_name">
+                    <!-- Filled by JS -->
+                </datalist>
+            </fieldset>
 
+            <fieldset>
+                <legend>Pokemon types</legend>
+                <label>Number of Pokemon types:</label>
+                <div class="row">
+                    <input type="checkbox" id="checkbox_single_type" name="checkbox_n_types" checked>
+                    <label for="checkbox_single_type">Single type</label>
+                    <input type="checkbox" id="checkbox_dual_type" name="checkbox_n_types" checked>
+                    <label for="checkbox_dual_type">Dual type</label>
+                </div>
+                <label>Number of Pokemon types that must match:</label>
+                <div class="row">
+                    <input type="radio" id="radio_one_type" name="radio_n_matching_types" checked>
+                    <label for="radio_one_type">One</label>
+                    <input type="radio" id="radio_two_types" name="radio_n_matching_types">
+                    <label for="radio_two_types">Two</label>
+                </div>
+                <div id="type_grid" class="type_grid">
+                    <!-- Filled by JS -->
+                </div>
+                <div class="row">
+                    <button id="button_all_types">Select all</button>
+                    <button id="button_no_types">Deselect all</button>
+                </div>
+            </fieldset>
         </aside>
         <main>
             <button class="generage_button" onclick="generate()">

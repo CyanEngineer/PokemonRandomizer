@@ -1,19 +1,35 @@
+// Data JSONs
 var pokemonJson;
 var typesJson;
-var fullFilterPool;
-var filterPool;
 
-var pokemonNameList;
-
+// Current pokemon info
 var currentPokemon;
 var currentGender; // TODO: currentShiny ??
 var currentGenderShiny;
 var currentFormIdx;
 var currentVariantIdx;
 
+// Filter variables
+var fullFilterPool;
+var filterPool;
+
+var validNTypes
+var allTypes;
+var validTypes;
+
+var pokemonNameList;
+
 // Filters elements
 const input_name = document.getElementById("input_name");
 const datalist_name = document.getElementById("datalist_name");
+
+const checkbox_single_type = document.getElementById("checkbox_single_type");
+const checkbox_dual_type = document.getElementById("checkbox_dual_type");
+const radio_one_type = document.getElementById("radio_one_type");
+const radio_two_types = document.getElementById("radio_two_types");
+const type_grid = document.getElementById("type_grid");
+const button_all_types = document.getElementById("button_all_types");
+const button_no_types = document.getElementById("button_no_types");
 
 // Randomizer elements
 const pokemon_img_container = document.getElementById("pokemon_img_container");
@@ -69,11 +85,22 @@ const formCorrections = {
     "Paldea": "Paldean"
 }
 
+console.log('hello');
+
+resetFilters();
+
 setup();
+
+function resetFilters() {
+    input_name.value = "";
+    checkbox_single_type.checked = true;
+    checkbox_dual_type.checked = true;
+    radio_one_type.checked = true;
+}
 
 async function setup() {
     // Fetch pokemon types
-    fetch("https://beta.pokeapi.co/graphql/v1beta", {
+    await fetch("https://beta.pokeapi.co/graphql/v1beta", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -120,6 +147,11 @@ async function setup() {
                         'efficacies': efficacies
                     }
                 }
+
+                allTypes = new Set(Object.keys(typesJson));
+                validTypes = new Set(allTypes);
+
+                populatePokemonTypes();
             }
         });
 
@@ -335,10 +367,48 @@ async function populateDataList() {
     }
 }
 
+async function populatePokemonTypes() {
+    for (type of Object.entries(typesJson)) {
+        const typeName = type[0];
+
+        const type_checkbox = document.createElement("div");
+        type_checkbox.classList = ["type_checkbox"];
+
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        const id = `checkbox_${typeName}`
+        checkbox.id = id;
+        checkbox.value = typeName;
+        checkbox.classList = ["hidden_checkbox"];
+        checkbox.onclick = () => togglePokemonType(checkbox);
+        checkbox.checked = true;
+        type_checkbox.appendChild(checkbox);
+
+        const label = document.createElement("label");
+        label.htmlFor = id;
+        label.innerHTML = `<img class="type_img" src=${type[1]['icon']}>`;
+        type_checkbox.appendChild(label);
+
+        type_grid.appendChild(type_checkbox);
+    }
+}
+
+function togglePokemonType(checkbox) {
+
+    if (checkbox.checked) {
+        validTypes.add(checkbox.value);
+    } else {
+        validTypes.delete(checkbox.value);
+    }
+}
+
 function generate() {
     updateFilterPool();
 
     currentPokemon = pokemonJson[filterPool[randInt(filterPool.length)]];
+
+    console.log(`Generated pokemon:`);
+    console.log(currentPokemon);
 
     currentGender = decideGender();
     shiny_checkbox.checked = decideShiny();
@@ -350,16 +420,58 @@ function updateFilterPool() {
     filterPool = fullFilterPool;
 
     const pokemonNameListIdx = pokemonNameList.indexOf(input_name.value);
-    if (pokemonNameListIdx > -1) { // User has specified a specific pokemon
+
+    // User has specified a specific pokemon
+    if (pokemonNameListIdx > -1) { 
         filterPool = [pokemonNameListIdx];
         return;
-    } else {
-        const searchString = input_name.value.toLowerCase();
-        filterPool = filterPool.filter((dexNumber) => (pokemonJson[dexNumber]['pretty_name'].toLowerCase().includes(searchString)));
+    } else { // User has not specified a specific pokemon
 
-        console.log("Dex numbers passing filter:");
+        // Name
+        const searchString = input_name.value.toLowerCase();
+        filterPool = filterPool.filter((dexIdx) => pokemonJson[dexIdx]['pretty_name'].toLowerCase().includes(searchString));
+
+        // Pokemon typing
+        validNTypes = [];
+        if (radio_one_type.checked) {
+            if (checkbox_single_type.checked) {
+                validNTypes.push(1);
+            }
+            if (checkbox_dual_type.checked) {
+                validNTypes.push(2);
+            }
+        } else {
+            validNTypes = [2];
+        }
+
+        if((validNTypes.length < 2) || (validTypes.size != allTypes.size)) {
+            filterPool = filterPool.filter((dexIdx) => formsWithValidTyping(pokemonJson[dexIdx]['pokemon_v2_pokemons']).length > 0);
+        }
+
+        console.log("Dex indices passing filter (add 1 for dex number):");
         console.log(filterPool);
     }
+}
+
+function formsWithValidTyping(pokemonForms) {
+
+    var validFormIndices = [...Array(pokemonForms.length).keys()];
+
+    if (radio_one_type.checked) {
+        validFormIndices = validFormIndices.filter((formIdx) => 
+            validNTypes.includes(pokemonForms[formIdx]['pokemon_v2_pokemontypes'].length) && 
+            pokemonForms[formIdx]['pokemon_v2_pokemontypes']
+                .some((value, index, array) => validTypes.has(value['pokemon_v2_type']['name']))
+        );
+    } else {
+        validFormIndices = validFormIndices.filter((formIdx) => 
+            (pokemonForms[formIdx]['pokemon_v2_pokemontypes'].length == 2) && 
+            pokemonForms[formIdx]['pokemon_v2_pokemontypes']
+                .every((value, index, array) => validTypes.has(value['pokemon_v2_type']['name']))
+        );
+    }
+
+    return validFormIndices;
 }
 
 function randInt(max) {
@@ -433,8 +545,9 @@ function setPokemon(formIdx=-1, variantIdx=-1) {
 
 function selectFormIdx(pokemonForms) {
     //TODO: Implement selection filtering
-    const formIdx = randInt(pokemonForms.length);
-    return formIdx;
+    const validFormIndices = formsWithValidTyping(pokemonForms);
+    const idxIdx = randInt(validFormIndices.length);
+    return validFormIndices[idxIdx];
 }
 
 function getForm(formIdx) {
@@ -615,7 +728,7 @@ function setAlternateForms() {
         const pokemonVariants = pokemonForms[formIdx]["pokemon_v2_pokemonforms"];
         for (const variantIdx in pokemonVariants) {
             const form_img = document.createElement("img");
-            form_img.classList.add("form_img")
+            form_img.classList = ["form_img"];
 
             if ((pokemonForms.length > 1) || (pokemonVariants.length > 1)) {
                 if ((formIdx == currentFormIdx) && (variantIdx == currentVariantIdx)) {
@@ -666,6 +779,50 @@ function switchGender() {
 input_name.addEventListener("input", () => {
     if (pokemonNameList.indexOf(input_name.value) > -1) {
         generate();
+    }
+});
+
+checkbox_single_type.addEventListener("click", () => {
+    if (!checkbox_single_type.checked && !checkbox_dual_type.checked) {
+        checkbox_dual_type.checked = true;
+    }
+});
+
+checkbox_dual_type.addEventListener("click", () => {
+    if (!checkbox_dual_type.checked && !checkbox_single_type.checked) {
+        checkbox_single_type.checked = true;
+    }
+});
+
+radio_one_type.addEventListener("click", () => {
+    if (radio_one_type.checked) {
+        checkbox_single_type.disabled = false;
+        checkbox_dual_type.disabled = false;
+    }
+});
+
+radio_two_types.addEventListener("click", () => {
+    if (radio_two_types.checked) {
+        checkbox_single_type.disabled = true;
+        checkbox_dual_type.disabled = true;
+    }
+});
+
+button_all_types.addEventListener("click", () => {
+    const checkboxes = document.querySelectorAll(".type_checkbox input");
+    for (const checkbox of checkboxes) {
+        if (!checkbox.checked) {
+            checkbox.click();
+        }
+    }
+});
+
+button_no_types.addEventListener("click", () => {
+    const checkboxes = document.querySelectorAll(".type_checkbox input");
+    for (const checkbox of checkboxes) {
+        if (checkbox.checked) {
+            checkbox.click();
+        }
     }
 });
 

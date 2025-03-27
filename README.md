@@ -6,10 +6,17 @@ A tool for selecting a random Pokémon.
 
 ### Filtering
 Based on
+- ~~Name~~
 - Generation
-- Type
+- ~~Type~~
+- Type efficacy???
 - Not fully evolved
+- Forms
 - Etc.
+
+Make sure filter pool is only updated when the filters have been changed
+
+Make sure it is handled when no pokemon match filters
 
 ### Form selection
 - ~~If forms are enabled, display a random one of them.~~
@@ -83,6 +90,8 @@ Based on
   - PokeAPI Mega Venusaur shouldn't have female sprite
   - Official Zen Darmanitan???
   - PokeAPI Shiny Zygarde 50
+  - There are fan sprites in Black White
+  - Many missing 
 - Missing sprites
   - Deerling + Sawsbuck
   - Spiky-eared Pichu
