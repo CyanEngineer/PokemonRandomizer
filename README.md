@@ -10,7 +10,12 @@ Based on
 - ~~Generation~~
 - ~~Type~~
 - Type efficacy???
-- Not fully evolved
+- ~~Not fully evolved~~
+  - ~~Unevolved~~
+  - ~~1st evolution~~
+  - ~~2nd evolution~~
+  - ~~Not fully evolved~~
+  - ~~Fully evolved~~
 - Forms
 - Etc.
 
@@ -22,6 +27,16 @@ Make sure it is handled when no pokemon match filters
 - ~~If forms are enabled, display a random one of them.~~
 - ~~Also show a list of all the alternative forms to choose from (selectable)~~
 - Try to see if I can postpone displaying until all images are loaded (form border too)
+- Consider using pokemon_v2_pokemon instead of pokemon_v2_pokemonspecies
+  - Pros
+    - More modular filtering
+    - Managable evolution chains for the regional disasters
+      - Can be done by checking evolution chain of the form, I guess
+  - Cons
+    - Pokemon with many forms are more likely to show up (e.g. charizard has 4)
+      - This can probably be remedied somehow
+    - Managing the connection between forms
+      - Dex number?
 
 ### Sprite selection
 - ~~Choose a sprite to display out of the sprites available in PokéAPI~~

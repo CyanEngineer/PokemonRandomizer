@@ -23,6 +23,8 @@ aside {
     flex-direction: column;
 	align-items: start;
     width: 20vw;
+	height: 100vh;
+	overflow: scroll;
 }
 
 ul {

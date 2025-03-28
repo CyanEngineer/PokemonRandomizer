@@ -30,6 +30,14 @@ const gen_grid = document.getElementById("gen_grid");
 const button_all_gens = document.getElementById("button_all_gens");
 const button_no_gens = document.getElementById("button_no_gens");
 
+const checkbox_unevolved = document.getElementById("checkbox_unevolved");
+const checkbox_not_fully_evo = document.getElementById("checkbox_not_fully_evo");
+const checkbox_fully_evo = document.getElementById("checkbox_fully_evo");
+const checkbox_first_evo = document.getElementById("checkbox_first_evo");
+const checkbox_second_evo = document.getElementById("checkbox_second_evo");
+const button_all_evo = document.getElementById("button_all_evo");
+const button_no_evo = document.getElementById("button_no_evo");
+
 const checkbox_single_type = document.getElementById("checkbox_single_type");
 const checkbox_dual_type = document.getElementById("checkbox_dual_type");
 const radio_one_type = document.getElementById("radio_one_type");
@@ -119,10 +127,10 @@ async function setup() {
                     is_baby
                     is_legendary
                     is_mythical
+                    evolves_from_species_id
                     pokemon_v2_evolutionchain {
                         pokemon_v2_pokemonspecies(order_by: {id: asc}) {
                             id
-                            name
                             evolves_from_species_id
                         }
                     }
@@ -213,11 +221,11 @@ async function setup() {
 
     modPokemonJson();
 
-    console.log("Types JSON:");
-    console.log(typesJson);
-    
     console.log("Pokemon JSON:");
     console.log(pokemonJson);
+
+    console.log("Types JSON:");
+    console.log(typesJson);
 
     // Set up filters
     fullFilterPool = [...Array(pokemonJson.length).keys()];
@@ -474,7 +482,35 @@ function updateFilterPool() {
         const searchString = input_name.value.toLowerCase();
         filterPool = filterPool.filter((dexIdx) => pokemonJson[dexIdx]['pretty_name'].toLowerCase().includes(searchString));
 
-        // Pokemon typing
+        // Evolution chain
+        if (!checkbox_unevolved.checked) {
+            filterPool = filterPool.filter((dexIdx) => pokemonJson[dexIdx]['evolves_from_species_id'] != null);
+        }
+        if (!checkbox_not_fully_evo.checked) {
+            filterPool = filterPool.filter((dexIdx) => pokemonJson[dexIdx]['pokemon_v2_evolutionchain']['pokemon_v2_pokemonspecies']
+                .every((pokemon) => pokemon['evolves_from_species_id'] != dexIdx+1)
+            );
+        }
+        if (!checkbox_fully_evo.checked) {
+            filterPool = filterPool.filter((dexIdx) => pokemonJson[dexIdx]['pokemon_v2_evolutionchain']['pokemon_v2_pokemonspecies']
+                .some((pokemon) => pokemon['evolves_from_species_id'] == dexIdx+1)
+            );
+        }
+        if (!checkbox_first_evo.checked) {
+            filterPool = filterPool.filter((dexIdx) => (
+                (pokemonJson[dexIdx]['evolves_from_species_id'] == null) ||
+                (pokemonJson[pokemonJson[dexIdx]['evolves_from_species_id']-1]['evolves_from_species_id'] != null)
+            )
+            );
+        }
+        if (!checkbox_second_evo.checked) {
+            filterPool = filterPool.filter((dexIdx) => (
+                (pokemonJson[dexIdx]['evolves_from_species_id'] == null) ||
+                (pokemonJson[pokemonJson[dexIdx]['evolves_from_species_id']-1]['evolves_from_species_id'] == null)
+            ));
+        }
+
+        // Pokemon typing and generation
         validNTypes = [];
         if (radio_one_type.checked) {
             if (checkbox_single_type.checked) {
@@ -874,6 +910,22 @@ button_no_gens.addEventListener("click", () => {
             checkbox.click();
         }
     }
+});
+
+button_all_evos.addEventListener("click", () => {
+    checkbox_unevolved.checked = true;
+    checkbox_not_fully_evo.checked = true;
+    checkbox_fully_evo.checked = true;
+    checkbox_first_evo.checked = true;
+    checkbox_second_evo.checked = true;
+});
+
+button_no_evos.addEventListener("click", () => {
+    checkbox_unevolved.checked = false;
+    checkbox_not_fully_evo.checked = false;
+    checkbox_fully_evo.checked = false;
+    checkbox_first_evo.checked = false;
+    checkbox_second_evo.checked = false;
 });
 
 button_all_types.addEventListener("click", () => {
