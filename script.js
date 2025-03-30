@@ -166,6 +166,11 @@ async function setup() {
                 const res = await response.json();
                 pokemonJson = res["data"]["species"];
             }
+        })
+        .catch(error => {
+            if (error instanceof TypeError && error.message.includes('NetworkError when attempting to fetch resource')) {
+                console.log("Unable to fetch resources from PokeAPI. Try reloading the page in a minute.");
+            }
         });
     
     // Fetch pokemon types
@@ -216,6 +221,11 @@ async function setup() {
                         'efficacies': efficacies
                     }
                 }
+            }
+        })
+        .catch(error => {
+            if (error instanceof TypeError && error.message.includes('NetworkError when attempting to fetch resource')) {
+                console.log("Unable to fetch resources from PokeAPI. Try reloading the page in a minute.");
             }
         });
 
