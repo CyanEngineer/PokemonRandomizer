@@ -16,8 +16,19 @@ Based on
   - ~~2nd evolution~~
   - ~~Not fully evolved~~
   - ~~Fully evolved~~
-- Forms
+- Variants
+  - ~~Default~~
+  - ~~Regional~~ (can we make this rely on fetching all region names?)
+  - ~~Mega~~
+  - ~~Gigantamax~~
+  - Unique
+    - Issues:
+      - Darmanital Standard Galarian
 - Etc.
+  - Baby
+  - Legendary
+  - Mythical
+  - Starter?
 
 Make sure filter pool is only updated when the filters have been changed
 
@@ -30,8 +41,6 @@ Make sure it is handled when no pokemon match filters
 - Consider using pokemon_v2_pokemon instead of pokemon_v2_pokemonspecies
   - Pros
     - More modular filtering
-    - Managable evolution chains for the regional disasters
-      - Can be done by checking evolution chain of the form, I guess
   - Cons
     - Pokemon with many forms are more likely to show up (e.g. charizard has 4)
       - This can probably be remedied somehow
@@ -64,6 +73,7 @@ Make sure it is handled when no pokemon match filters
     - ~~X Shaymin -> X Forme Shaymin~~
     - ~~Paldea X Breed Tauros -> X Breed Paldean Tauros~~
     - ~~Flabebe -> Flabébé~~
+    - Standard Darmanitan -> Darmanitan (Galar too)
     - Gmax Urshifu has same name for both versions
   - Gender
     - ~~Separate forms~~

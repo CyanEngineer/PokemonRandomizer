@@ -16,6 +16,9 @@ var filterPool;
 var allGens;
 var validGens;
 
+const allGeneralVariations = ['mega', 'mega-x', 'mega-y', 'gmax', 'alola', 'galar', 'hisui', 'paldea'];
+var invalidVariations;
+
 var validNTypes
 var allTypes;
 var validTypes;
@@ -30,13 +33,19 @@ const gen_grid = document.getElementById("gen_grid");
 const button_all_gens = document.getElementById("button_all_gens");
 const button_no_gens = document.getElementById("button_no_gens");
 
+const checkbox_default = document.getElementById("checkbox_default");
+const checkbox_regional = document.getElementById("checkbox_regional");
+const checkbox_unique = document.getElementById("checkbox_unique");
+const checkbox_mega = document.getElementById("checkbox_mega");
+const checkbox_gmax = document.getElementById("checkbox_gmax");
+
 const checkbox_unevolved = document.getElementById("checkbox_unevolved");
 const checkbox_not_fully_evo = document.getElementById("checkbox_not_fully_evo");
 const checkbox_fully_evo = document.getElementById("checkbox_fully_evo");
 const checkbox_first_evo = document.getElementById("checkbox_first_evo");
 const checkbox_second_evo = document.getElementById("checkbox_second_evo");
-const button_all_evo = document.getElementById("button_all_evo");
-const button_no_evo = document.getElementById("button_no_evo");
+const button_all_evos = document.getElementById("button_all_evos");
+const button_no_evos = document.getElementById("button_no_evos");
 
 const checkbox_single_type = document.getElementById("checkbox_single_type");
 const checkbox_dual_type = document.getElementById("checkbox_dual_type");
@@ -106,6 +115,13 @@ setup();
 
 function resetFilters() {
     input_name.value = "";
+
+    checkbox_default.checked = true;
+    checkbox_regional.checked = true;
+    checkbox_unique.checked = true;
+    checkbox_mega.checked = true;
+    checkbox_gmax.checked = true;
+
     checkbox_single_type.checked = true;
     checkbox_dual_type.checked = true;
     radio_one_type.checked = true;
@@ -135,6 +151,7 @@ async function setup() {
                         }
                     }
                     pokemon_v2_pokemons {
+                        is_default
                         pokemon_v2_pokemonforms {
                             name
                             form_name
@@ -244,6 +261,8 @@ async function setup() {
     const nGens = pokemonJson[pokemonJson.length - 1]['pokemon_v2_pokemons'][0]['pokemon_v2_pokemonforms'][0]['pokemon_v2_versiongroup']['generation_id'];
     allGens = new Set(Array.from({length: nGens}, (_, i) => i+1));
     validGens = new Set(allGens);
+
+    invalidVariations = new Set();
 
     allTypes = new Set(Object.keys(typesJson));
     validTypes = new Set(allTypes);
@@ -520,7 +539,7 @@ function updateFilterPool() {
             ));
         }
 
-        // Pokemon typing and generation
+        // Pokemon variations, typing and generation
         validNTypes = [];
         if (radio_one_type.checked) {
             if (checkbox_single_type.checked) {
@@ -533,9 +552,7 @@ function updateFilterPool() {
             validNTypes = [2];
         }
 
-        if((validGens.size != allGens.size) || (validNTypes.length < 2) || (validTypes.size != allTypes.size)) {
-            filterPool = filterPool.filter((dexIdx) => getValidForms(pokemonJson[dexIdx]['pokemon_v2_pokemons']).length > 0);
-        }
+        filterPool = filterPool.filter((dexIdx) => getValidForms(pokemonJson[dexIdx]['pokemon_v2_pokemons']).length > 0);
 
         console.log("Dex indices passing filter (add 1 for dex number):");
         console.log(filterPool);
@@ -546,13 +563,30 @@ function getValidForms(pokemonForms) {
 
     var validFormIndices = [...Array(pokemonForms.length).keys()];
 
-    // Generation filter
+    // Generation filtering
     if (validGens.size != allGens.size) {
         validFormIndices = validFormIndices.filter((formIdx) =>
             validGens.has(pokemonForms[formIdx]['pokemon_v2_pokemonforms'][0]['pokemon_v2_versiongroup']['generation_id']));
     }
 
-    // Types filter
+    // Variation filtering
+    if (!checkbox_default.checked) {
+        validFormIndices = validFormIndices.filter((formIdx) => !pokemonForms[formIdx]['is_default']);
+    }
+    if (invalidVariations.size > 0) {
+        validFormIndices = validFormIndices.filter((formIdx) => 
+            invalidVariations.values().every((variation) => 
+                !pokemonForms[formIdx]['pokemon_v2_pokemonforms'][0]['form_name'].includes(variation)));
+    }
+    if (!checkbox_unique.checked) {
+        validFormIndices = validFormIndices.filter((formIdx) =>
+            pokemonForms[formIdx]['is_default'] || (pokemonForms[formIdx]['pokemon_v2_pokemonforms'][0]['form_name'].replaceAll(
+                /mega|mega-x|mega-y|gmax|alola|galar|hisui|paldea/gi, ""
+            ).trim() == ""));
+    }
+
+
+    // Types filtering
     if (radio_one_type.checked) {
         validFormIndices = validFormIndices.filter((formIdx) => 
             validNTypes.includes(pokemonForms[formIdx]['pokemon_v2_pokemontypes'].length) && 
@@ -652,8 +686,11 @@ function getForm(formIdx) {
 
 function selectVariantIdx(pokemonVariants) {
     //TODO: Implement selection filtering
-    const variantIdx = randInt(pokemonVariants.length);
-    return variantIdx;
+    if (checkbox_unique.checked) {
+        return randInt(pokemonVariants.length);
+    } else {
+        return 0;
+    }
 }
 
 function getVariant(formIdx, variantIdx) {
@@ -920,6 +957,46 @@ button_no_gens.addEventListener("click", () => {
             checkbox.click();
         }
     }
+});
+
+checkbox_default.addEventListener("click", () => {
+
+});
+
+checkbox_regional.addEventListener("click", () => {
+    if (checkbox_regional.checked) {
+        invalidVariations.delete("alola");
+        invalidVariations.delete("galar");
+        invalidVariations.delete("hisui");
+        invalidVariations.delete("paldea");
+    } else {
+        invalidVariations.add("alola").add("galar").add("hisui").add("paldea");
+    }
+    console.log(invalidVariations);
+});
+
+checkbox_unique.addEventListener("click", () => {
+
+});
+
+checkbox_mega.addEventListener("click", () => {
+    if (checkbox_mega.checked) {
+        invalidVariations.delete("mega");
+        invalidVariations.delete("mega-x");
+        invalidVariations.delete("mega-y");
+    } else {
+        invalidVariations.add("mega").add("mega-x").add("mega-y");
+    }
+    console.log(invalidVariations);
+});
+
+checkbox_gmax.addEventListener("click", () => {
+    if (checkbox_gmax.checked) {
+        invalidVariations.delete("gmax");
+    } else {
+        invalidVariations.add("gmax");
+    }
+    console.log(invalidVariations);
 });
 
 button_all_evos.addEventListener("click", () => {
