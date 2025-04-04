@@ -16,8 +16,9 @@ var filterPool;
 var allGens;
 var validGens;
 
-const allGeneralVariations = ['mega', 'mega-x', 'mega-y', 'gmax', 'alola', 'galar', 'hisui', 'paldea'];
-var invalidVariations;
+var excludedVariations;
+
+var excludedKinds;
 
 var validNTypes
 var allTypes;
@@ -38,6 +39,11 @@ const checkbox_regional = document.getElementById("checkbox_regional");
 const checkbox_unique = document.getElementById("checkbox_unique");
 const checkbox_mega = document.getElementById("checkbox_mega");
 const checkbox_gmax = document.getElementById("checkbox_gmax");
+
+const checkbox_ordinary = document.getElementById("checkbox_ordinary");
+const checkbox_baby = document.getElementById("checkbox_baby");
+const checkbox_legendary = document.getElementById("checkbox_legendary");
+const checkbox_mythical = document.getElementById("checkbox_mythical");
 
 const checkbox_unevolved = document.getElementById("checkbox_unevolved");
 const checkbox_not_fully_evo = document.getElementById("checkbox_not_fully_evo");
@@ -121,6 +127,11 @@ function resetFilters() {
     checkbox_unique.checked = true;
     checkbox_mega.checked = true;
     checkbox_gmax.checked = true;
+
+    checkbox_ordinary.checked = true;
+    checkbox_baby.checked = true;
+    checkbox_legendary.checked = true;
+    checkbox_mythical.checked = true;
 
     checkbox_single_type.checked = true;
     checkbox_dual_type.checked = true;
@@ -262,7 +273,9 @@ async function setup() {
     allGens = new Set(Array.from({length: nGens}, (_, i) => i+1));
     validGens = new Set(allGens);
 
-    invalidVariations = new Set();
+    excludedVariations = new Set();
+
+    excludedKinds = new Set();
 
     allTypes = new Set(Object.keys(typesJson));
     validTypes = new Set(allTypes);
@@ -511,6 +524,24 @@ function updateFilterPool() {
         const searchString = input_name.value.toLowerCase();
         filterPool = filterPool.filter((dexIdx) => pokemonJson[dexIdx]['pretty_name'].toLowerCase().includes(searchString));
 
+        // Kind
+        if(!checkbox_ordinary.checked) {
+            filterPool = filterPool.filter((dexIdx) => 
+                pokemonJson[dexIdx].is_baby ||
+                pokemonJson[dexIdx].is_legendary ||
+                pokemonJson[dexIdx].is_mythical
+            );
+        }
+        if(!checkbox_baby.checked) {
+            filterPool = filterPool.filter((dexIdx) => !pokemonJson[dexIdx].is_baby);
+        }
+        if(!checkbox_legendary.checked) {
+            filterPool = filterPool.filter((dexIdx) => !pokemonJson[dexIdx].is_legendary);
+        }
+        if(!checkbox_mythical.checked) {
+            filterPool = filterPool.filter((dexIdx) => !pokemonJson[dexIdx].is_mythical);
+        }
+
         // Evolution chain
         if (!checkbox_unevolved.checked) {
             filterPool = filterPool.filter((dexIdx) => pokemonJson[dexIdx]['evolves_from_species_id'] != null);
@@ -573,9 +604,9 @@ function getValidForms(pokemonForms) {
     if (!checkbox_default.checked) {
         validFormIndices = validFormIndices.filter((formIdx) => !pokemonForms[formIdx]['is_default']);
     }
-    if (invalidVariations.size > 0) {
+    if (excludedVariations.size > 0) {
         validFormIndices = validFormIndices.filter((formIdx) => 
-            invalidVariations.values().every((variation) => 
+            excludedVariations.values().every((variation) => 
                 !pokemonForms[formIdx]['pokemon_v2_pokemonforms'][0]['form_name'].includes(variation)));
     }
     if (!checkbox_unique.checked) {
@@ -584,7 +615,6 @@ function getValidForms(pokemonForms) {
                 /mega|mega-x|mega-y|gmax|alola|galar|hisui|paldea/gi, ""
             ).trim() == ""));
     }
-
 
     // Types filtering
     if (radio_one_type.checked) {
@@ -965,14 +995,13 @@ checkbox_default.addEventListener("click", () => {
 
 checkbox_regional.addEventListener("click", () => {
     if (checkbox_regional.checked) {
-        invalidVariations.delete("alola");
-        invalidVariations.delete("galar");
-        invalidVariations.delete("hisui");
-        invalidVariations.delete("paldea");
+        excludedVariations.delete("alola");
+        excludedVariations.delete("galar");
+        excludedVariations.delete("hisui");
+        excludedVariations.delete("paldea");
     } else {
-        invalidVariations.add("alola").add("galar").add("hisui").add("paldea");
+        excludedVariations.add("alola").add("galar").add("hisui").add("paldea");
     }
-    console.log(invalidVariations);
 });
 
 checkbox_unique.addEventListener("click", () => {
@@ -981,22 +1010,20 @@ checkbox_unique.addEventListener("click", () => {
 
 checkbox_mega.addEventListener("click", () => {
     if (checkbox_mega.checked) {
-        invalidVariations.delete("mega");
-        invalidVariations.delete("mega-x");
-        invalidVariations.delete("mega-y");
+        excludedVariations.delete("mega");
+        excludedVariations.delete("mega-x");
+        excludedVariations.delete("mega-y");
     } else {
-        invalidVariations.add("mega").add("mega-x").add("mega-y");
+        excludedVariations.add("mega").add("mega-x").add("mega-y");
     }
-    console.log(invalidVariations);
 });
 
 checkbox_gmax.addEventListener("click", () => {
     if (checkbox_gmax.checked) {
-        invalidVariations.delete("gmax");
+        excludedVariations.delete("gmax");
     } else {
-        invalidVariations.add("gmax");
+        excludedVariations.add("gmax");
     }
-    console.log(invalidVariations);
 });
 
 button_all_evos.addEventListener("click", () => {

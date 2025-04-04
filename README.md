@@ -25,9 +25,9 @@ Based on
     - Issues:
       - Darmanital Standard Galarian
 - Etc.
-  - Baby
-  - Legendary
-  - Mythical
+  - ~~Baby~~
+  - ~~Legendary~~
+  - ~~Mythical~~
   - Starter?
 
 Make sure filter pool is only updated when the filters have been changed
@@ -73,7 +73,6 @@ Make sure it is handled when no pokemon match filters
     - ~~X Shaymin -> X Forme Shaymin~~
     - ~~Paldea X Breed Tauros -> X Breed Paldean Tauros~~
     - ~~Flabebe -> Flabébé~~
-    - Standard Darmanitan -> Darmanitan (Galar too)
     - Gmax Urshifu has same name for both versions
   - Gender
     - ~~Separate forms~~
@@ -110,6 +109,7 @@ Make sure it is handled when no pokemon match filters
 ### Stuff I should report
 - Frillish + Jellicent have forms that shouldn't be there (probably for females)
 - No Showdown gen 9 sprites
+- Type: Null should have is_legendary true
 - Incorrect gender rate
   - Fezandipiti
   - Munkidori
