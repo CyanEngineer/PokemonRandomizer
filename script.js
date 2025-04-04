@@ -10,6 +10,8 @@ var currentFormIdx;
 var currentVariantIdx;
 
 // Filter variables
+var hasFilterChanges = true;
+
 var fullFilterPool;
 var filterPool;
 
@@ -452,6 +454,7 @@ async function populateGenGrid() {
 }
 
 function toggleGeneration(checkbox) {
+    hasFilterChanges = true;
 
     if (checkbox.checked) {
         validGens.add(Number(checkbox.value));
@@ -487,6 +490,7 @@ async function populateTypeGrid() {
 }
 
 function togglePokemonType(checkbox) {
+    hasFilterChanges = true;
 
     if (checkbox.checked) {
         validTypes.add(checkbox.value);
@@ -496,7 +500,10 @@ function togglePokemonType(checkbox) {
 }
 
 function generate() {
-    updateFilterPool();
+    if (hasFilterChanges) {
+        hasFilterChanges = false;
+        updateFilterPool();
+    }
 
     currentPokemon = pokemonJson[filterPool[randInt(filterPool.length)]];
 
@@ -940,38 +947,14 @@ function switchGender() {
 // -------------------- Event handlers -------------------- //
 
 input_name.addEventListener("input", () => {
+    hasFilterChanges = true;
     if (pokemonNameList.indexOf(input_name.value) > -1) {
         generate();
     }
 });
 
-checkbox_single_type.addEventListener("click", () => {
-    if (!checkbox_single_type.checked && !checkbox_dual_type.checked) {
-        checkbox_dual_type.checked = true;
-    }
-});
-
-checkbox_dual_type.addEventListener("click", () => {
-    if (!checkbox_dual_type.checked && !checkbox_single_type.checked) {
-        checkbox_single_type.checked = true;
-    }
-});
-
-radio_one_type.addEventListener("click", () => {
-    if (radio_one_type.checked) {
-        checkbox_single_type.disabled = false;
-        checkbox_dual_type.disabled = false;
-    }
-});
-
-radio_two_types.addEventListener("click", () => {
-    if (radio_two_types.checked) {
-        checkbox_single_type.disabled = true;
-        checkbox_dual_type.disabled = true;
-    }
-});
-
 button_all_gens.addEventListener("click", () => {
+    hasFilterChanges = true;
     const checkboxes = document.querySelectorAll(".gen_checkbox input");
     for (const checkbox of checkboxes) {
         if (!checkbox.checked) {
@@ -981,6 +964,7 @@ button_all_gens.addEventListener("click", () => {
 });
 
 button_no_gens.addEventListener("click", () => {
+    hasFilterChanges = true;
     const checkboxes = document.querySelectorAll(".gen_checkbox input");
     for (const checkbox of checkboxes) {
         if (checkbox.checked) {
@@ -990,10 +974,11 @@ button_no_gens.addEventListener("click", () => {
 });
 
 checkbox_default.addEventListener("click", () => {
-
+    hasFilterChanges = true;
 });
 
 checkbox_regional.addEventListener("click", () => {
+    hasFilterChanges = true;
     if (checkbox_regional.checked) {
         excludedVariations.delete("alola");
         excludedVariations.delete("galar");
@@ -1005,10 +990,11 @@ checkbox_regional.addEventListener("click", () => {
 });
 
 checkbox_unique.addEventListener("click", () => {
-
+    hasFilterChanges = true;
 });
 
 checkbox_mega.addEventListener("click", () => {
+    hasFilterChanges = true;
     if (checkbox_mega.checked) {
         excludedVariations.delete("mega");
         excludedVariations.delete("mega-x");
@@ -1019,6 +1005,7 @@ checkbox_mega.addEventListener("click", () => {
 });
 
 checkbox_gmax.addEventListener("click", () => {
+    hasFilterChanges = true;
     if (checkbox_gmax.checked) {
         excludedVariations.delete("gmax");
     } else {
@@ -1026,7 +1013,44 @@ checkbox_gmax.addEventListener("click", () => {
     }
 });
 
+checkbox_ordinary.addEventListener("click", () => {
+    hasFilterChanges = true;
+});
+
+checkbox_baby.addEventListener("click", () => {
+    hasFilterChanges = true;
+});
+
+checkbox_legendary.addEventListener("click", () => {
+    hasFilterChanges = true;
+});
+
+checkbox_mythical.addEventListener("click", () => {
+    hasFilterChanges = true;
+});
+
+checkbox_unevolved.addEventListener("click", () => {
+    hasFilterChanges = true;
+});
+
+checkbox_not_fully_evo.addEventListener("click", () => {
+    hasFilterChanges = true;
+});
+
+checkbox_fully_evo.addEventListener("click", () => {
+    hasFilterChanges = true;
+});
+
+checkbox_first_evo.addEventListener("click", () => {
+    hasFilterChanges = true;
+});
+
+checkbox_second_evo.addEventListener("click", () => {
+    hasFilterChanges = true;
+});
+
 button_all_evos.addEventListener("click", () => {
+    hasFilterChanges = true;
     checkbox_unevolved.checked = true;
     checkbox_not_fully_evo.checked = true;
     checkbox_fully_evo.checked = true;
@@ -1035,6 +1059,7 @@ button_all_evos.addEventListener("click", () => {
 });
 
 button_no_evos.addEventListener("click", () => {
+    hasFilterChanges = true;
     checkbox_unevolved.checked = false;
     checkbox_not_fully_evo.checked = false;
     checkbox_fully_evo.checked = false;
@@ -1042,7 +1067,38 @@ button_no_evos.addEventListener("click", () => {
     checkbox_second_evo.checked = false;
 });
 
+checkbox_single_type.addEventListener("click", () => {
+    hasFilterChanges = true;
+    if (!checkbox_single_type.checked && !checkbox_dual_type.checked) {
+        checkbox_dual_type.checked = true;
+    }
+});
+
+checkbox_dual_type.addEventListener("click", () => {
+    hasFilterChanges = true;
+    if (!checkbox_dual_type.checked && !checkbox_single_type.checked) {
+        checkbox_single_type.checked = true;
+    }
+});
+
+radio_one_type.addEventListener("click", () => {
+    hasFilterChanges = true;
+    if (radio_one_type.checked) {
+        checkbox_single_type.disabled = false;
+        checkbox_dual_type.disabled = false;
+    }
+});
+
+radio_two_types.addEventListener("click", () => {
+    hasFilterChanges = true;
+    if (radio_two_types.checked) {
+        checkbox_single_type.disabled = true;
+        checkbox_dual_type.disabled = true;
+    }
+});
+
 button_all_types.addEventListener("click", () => {
+    hasFilterChanges = true;
     const checkboxes = document.querySelectorAll(".type_checkbox input");
     for (const checkbox of checkboxes) {
         if (!checkbox.checked) {
@@ -1052,6 +1108,7 @@ button_all_types.addEventListener("click", () => {
 });
 
 button_no_types.addEventListener("click", () => {
+    hasFilterChanges = true;
     const checkboxes = document.querySelectorAll(".type_checkbox input");
     for (const checkbox of checkboxes) {
         if (checkbox.checked) {
