@@ -369,6 +369,8 @@ function modPokemonJson() {
 
     pokemonJson[717]["pokemon_v2_pokemons"].splice(1, 2); // Zygarde
 
+    pokemonJson[743]["pokemon_v2_pokemons"].splice(1); // Rockruff
+
     pokemonJson[773]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["name"] = "minior-meteor";
     pokemonJson[773]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["form_name"] = "meteor";
     pokemonJson[773]["pokemon_v2_pokemons"].splice(1, 6);
