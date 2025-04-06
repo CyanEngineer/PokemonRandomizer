@@ -165,9 +165,19 @@ async function setup() {
                     }
                     pokemon_v2_pokemons {
                         is_default
+                        pokemon_v2_pokemontypes {
+                            pokemon_v2_type {
+                                name
+                            }
+                        }
                         pokemon_v2_pokemonforms {
                             name
                             form_name
+                            pokemon_v2_pokemonformtypes {
+                                pokemon_v2_type {
+                                    name
+                                }
+                            }
                             pokemon_v2_versiongroup {
                                 generation_id
                             }
@@ -175,11 +185,6 @@ async function setup() {
                                 pokemon_v2_pokemonsprites {
                                     sprites
                                 }
-                            }
-                        }
-                        pokemon_v2_pokemontypes {
-                            pokemon_v2_type {
-                                name
                             }
                         }
                     }
@@ -401,6 +406,18 @@ function modPokemonJson() {
     pokemonJson[1012]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["name"] = "sinistcha";
     pokemonJson[1012]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["form_name"] = "";
     pokemonJson[1012]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"].splice(1);
+
+    // Turn the Arceus and Silvally types into forms (sorry, it's just easier this way...)
+    for (const idx of [492, 772]) {
+        for (let i=1; i < pokemonJson[idx]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"].length; i++) {
+            pokemonJson[idx]["pokemon_v2_pokemons"][i] = {
+                "is_default": false,
+                "pokemon_v2_pokemonforms": [pokemonJson[idx]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][i]],
+                "pokemon_v2_pokemontypes": pokemonJson[idx]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][i]["pokemon_v2_pokemonformtypes"]
+            }
+        }
+        pokemonJson[idx]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"].splice(1);
+    }
 
     // Put style into Urshifu gmax
     pokemonJson[891]['pokemon_v2_pokemons'][2]["pokemon_v2_pokemonforms"][0]["form_name"] =

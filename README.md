@@ -43,12 +43,15 @@ Make sure it is handled when no pokemon match filters
 - Try to see if I can postpone displaying until all images are loaded (form border too)
 - Consider using pokemon_v2_pokemon instead of pokemon_v2_pokemonspecies
   - Pros
-    - More modular filtering
+    - More modular filtering (go back and check the valid forms function if it all even makes sense)
   - Cons
     - Pokemon with many forms are more likely to show up (e.g. charizard has 4)
       - This can probably be remedied somehow
     - Managing the connection between forms
       - Dex number?
+  - Ooooor perhaps restructure so the pokemonjson (or separate variable) is a list of dex numbers, each element containing the default and variations
+    - Then loop over each form of each dex when filtering
+    - This will keep the list at 1025, while making the default variation equal to the others
 
 ### Sprite selection
 - ~~Choose a sprite to display out of the sprites available in PokéAPI~~
@@ -62,7 +65,7 @@ Make sure it is handled when no pokemon match filters
 ### Linked list (history)?
 
 ### Other todos
-- Arceus and Silvally types are only in pokemon_v2_pokemonformtypes (except for normal)
+- ~~Arceus and Silvally types are only in pokemon_v2_pokemonformtypes (except for normal)~~
 - Handle missing images
 - Dream World doesn't have shinies
 - ~~Link to other resources (Bulbapedia, Bulbapedia img archive, Pokemondb, Official Pokedex)~~
@@ -142,5 +145,7 @@ Make sure it is handled when no pokemon match filters
   - Showdown Hisuian Electrode
 - Arceus + Silvally
   - Types are only in pokemon_v2_pokemonformtypes (except normal)
+    - Could we, like, always put the type in formtype, regardless of it being extraordinary or not?
+    - Arceus form order is not the same as the general type order
   - Missing Dream World sprites (Silvally - not sure about Arceus)
   - All alternate forms use standard sprite
