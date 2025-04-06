@@ -399,6 +399,12 @@ function modPokemonJson() {
     pokemonJson[1012]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["name"] = "sinistcha";
     pokemonJson[1012]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"][0]["form_name"] = "";
     pokemonJson[1012]["pokemon_v2_pokemons"][0]["pokemon_v2_pokemonforms"].splice(1);
+
+    // Put style into Urshifu gmax
+    pokemonJson[891]['pokemon_v2_pokemons'][2]["pokemon_v2_pokemonforms"][0]["form_name"] =
+        "gmax-" + pokemonJson[891]['pokemon_v2_pokemons'][0]["pokemon_v2_pokemonforms"][0]["form_name"];
+    pokemonJson[891]['pokemon_v2_pokemons'][3]["pokemon_v2_pokemonforms"][0]["form_name"] =
+        "gmax-" + pokemonJson[891]['pokemon_v2_pokemons'][1]["pokemon_v2_pokemonforms"][0]["form_name"];
 }
 
 function getPrettyName(dataName) {
@@ -834,18 +840,24 @@ function setName() {
             } else {
                 fullName = prettyName + " " + formNameParts[0] + "% Forme"
             }
-        } else {
+        }  else {
             fullName = formNameParts[0] + " " + prettyName;
         }
-    } else {
+    } else if (formNameParts.length == 2) {
         if ((formNameParts[0] == "Mega") && 
             ((formNameParts[1] == "X") ||
              (formNameParts[1] == "Y"))) { // "X"/"Y" comes after the pokemon name
             fullName = formNameParts[0] + " " + prettyName + " " + formNameParts[1];
+        } else if ((prettyName == "Urshifu")) {
+            fullName = formNameParts[0] + " " + formNameParts[1] + " Style " + prettyName;
         } else if ((prettyName == "Tauros") && (formNameParts[0] == "Paldean")) {
             fullName = formNameParts[1] + " " + formNameParts[2] + " " + formNameParts[0] + prettyName;
         } else {
             fullName = formNameParts.join(" ") + " " + prettyName;
+        }
+    } else {
+        if (prettyName == "Urshifu") {
+            fullName = formNameParts[0] + " " + formNameParts[1] + " " + formNameParts[2] + " Style " + prettyName;
         }
     }
 
