@@ -869,13 +869,13 @@ function setName() {
             fullName = formNameParts[0] + " " + prettyName + " " + formNameParts[1];
         } else if ((prettyName == "Urshifu")) {
             fullName = formNameParts[0] + " " + formNameParts[1] + " Style " + prettyName;
-        } else if ((prettyName == "Tauros") && (formNameParts[0] == "Paldean")) {
-            fullName = formNameParts[1] + " " + formNameParts[2] + " " + formNameParts[0] + prettyName;
         } else {
             fullName = formNameParts.join(" ") + " " + prettyName;
         }
     } else {
-        if (prettyName == "Urshifu") {
+        if ((prettyName == "Tauros") && (formNameParts[0] == "Paldean")) {
+            fullName = formNameParts[1] + " " + formNameParts[2] + " " + formNameParts[0] + " " + prettyName;
+        } else if (prettyName == "Urshifu") {
             fullName = formNameParts[0] + " " + formNameParts[1] + " " + formNameParts[2] + " Style " + prettyName;
         }
     }
