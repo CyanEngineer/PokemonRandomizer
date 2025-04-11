@@ -7,138 +7,147 @@
     </head>
 
     <body>
-        <aside>
-            <h2>Filters</h2>
-            <fieldset>
-                <legend>Pokemon name</legend>
-                <form>
-                    Full/partial name: 
-                    <span class="clearable_input">
-                        <input id=input_name list="datalist_name" type="text">
-                        <input type="reset" value="X">
-                    </span>
-                </form>
-                <datalist id="datalist_name">
-                    <!-- Filled by JS -->
-                </datalist>
-            </fieldset>
-
-            <fieldset>
-                <legend>Introduced generation</legend>
-                <div id="gen_grid" class="grid">
-                    <!-- Filled by JS -->
+        <aside class="filter_container">
+            <button id="button_filter_panel" class="button_filter_panel">Filters</button>
+            <div id="filter_panel" class="filter_panel">
+                <div class="ltr_container">
+                    <div class="panel_title_row">
+                        <button id="button_filter_panel_close" class="button_filter_panel hidden">X</button>
+                        <div></div>
+                        <h2>Filters</h2>
+                    </div>
+                    <fieldset>
+                        <legend>Pokemon name</legend>
+                        <form>
+                            Full/partial name: 
+                            <span class="clearable_input">
+                                <input id=input_name list="datalist_name" type="text">
+                                <input type="reset" value="X">
+                            </span>
+                        </form>
+                        <datalist id="datalist_name">
+                            <!-- Filled by JS -->
+                        </datalist>
+                    </fieldset>
+        
+                    <fieldset>
+                        <legend>Introduced generation</legend>
+                        <div id="gen_grid" class="grid">
+                            <!-- Filled by JS -->
+                        </div>
+                        <div>
+                            <button id="button_all_gens">Select all</button>
+                            <button id="button_no_gens">Deselect all</button>
+                        </div>
+                    </fieldset>
+        
+                    <fieldset>
+                        <legend>Variations / forms</legend>
+                        <div class="grid">
+                            <div>
+                                <input id="checkbox_default" type="checkbox" checked>
+                                <label for="checkbox_default">Default</label>
+                            </div>
+                            <div>
+                                <input id="checkbox_mega" type="checkbox" checked>
+                                <label for="checkbox_mega">Mega</label>
+                            </div>
+                            <div>
+                                <input id="checkbox_regional" type="checkbox" checked>
+                                <label for="checkbox_regional">Regional</label>
+                            </div>
+                            <div>
+                                <input id="checkbox_gmax" type="checkbox" checked>
+                                <label for="checkbox_gmax">Gigantamax</label>
+                            </div>
+                            <div>
+                                <input id="checkbox_unique" type="checkbox" checked>
+                                <label for="checkbox_unique">Unique</label>
+                            </div>
+                        </div>
+                    </fieldset>
+        
+                    <fieldset>
+                        <legend>Special kinds of Pokémon</legend>
+                        <div class="grid">
+                            <div>
+                                <input id="checkbox_ordinary" type="checkbox" checked>
+                                <label for="checkbox_ordinary">Ordinary</label>
+                            </div>
+                            <div>
+                                <input id="checkbox_legendary" type="checkbox" checked>
+                                <label for="checkbox_legendary">Legendary</label>
+                            </div>
+                            <div>
+                                <input id="checkbox_baby" type="checkbox" checked>
+                                <label for="checkbox_baby">Baby</label>
+                            </div>
+                            <div>
+                                <input id="checkbox_mythical" type="checkbox" checked>
+                                <label for="checkbox_mythical">Mythical</label>
+                            </div>
+                        </div>
+                    </fieldset>
+        
+                    <fieldset>
+                        <legend>Evolution chain (over all regional variants)</legend>
+                        <label>(e.g. Mr. Mime counts as "Not fully evolved")</label>
+                        <div class="grid">
+                            <div>
+                                <input id="checkbox_unevolved" type="checkbox" checked>
+                                <label for="checkbox_unevolved">Unevolved</label>
+                            </div>
+                            <div>
+                                <input id="checkbox_first_evo" type="checkbox" checked>
+                                <label for="checkbox_first_evo">1st evolution</label>
+                            </div>
+                            <div>
+                                <input id="checkbox_not_fully_evo" type="checkbox" checked>
+                                <label for="checkbox_not_fully_evo">Not fully evolved</label>
+                            </div>
+                            <div>
+                                <input id="checkbox_second_evo" type="checkbox" checked>
+                                <label for="checkbox_second_evo">2nd evolution</label>
+                            </div>
+                            <div>
+                                <input id="checkbox_fully_evo" type="checkbox" checked>
+                                <label for="checkbox_fully_evo">Fully evolved</label>
+                            </div>
+                        </div>
+                        <div>
+                            <button id="button_all_evos">Select all</button>
+                            <button id="button_no_evos">Deselect all</button>
+                        </div>
+                    </fieldset>
+        
+                    <fieldset>
+                        <legend>Pokemon types</legend>
+                        <label>Number of Pokemon types:</label>
+                        <div>
+                            <input type="checkbox" id="checkbox_single_type" name="checkbox_n_types" checked>
+                            <label for="checkbox_single_type">Single type</label>
+                            <input type="checkbox" id="checkbox_dual_type" name="checkbox_n_types" checked>
+                            <label for="checkbox_dual_type">Dual type</label>
+                        </div>
+                        <label>Number of Pokemon types that must match:</label>
+                        <div>
+                            <input type="radio" id="radio_one_type" name="radio_n_matching_types" checked>
+                            <label for="radio_one_type">One</label>
+                            <input type="radio" id="radio_two_types" name="radio_n_matching_types">
+                            <label for="radio_two_types">Two</label>
+                        </div>
+                        <div id="type_grid" class="grid">
+                            <!-- Filled by JS -->
+                        </div>
+                        <div>
+                            <button id="button_all_types">Select all</button>
+                            <button id="button_no_types">Deselect all</button>
+                        </div>
+                    </fieldset>
                 </div>
-                <div class="row">
-                    <button id="button_all_gens">Select all</button>
-                    <button id="button_no_gens">Deselect all</button>
-                </div>
-            </fieldset>
-
-            <fieldset>
-                <legend>Variations / forms</legend>
-                <div class="grid">
-                    <div>
-                        <input id="checkbox_default" type="checkbox" checked>
-                        <label for="checkbox_default">Default</label>
-                    </div>
-                    <div>
-                        <input id="checkbox_mega" type="checkbox" checked>
-                        <label for="checkbox_mega">Mega</label>
-                    </div>
-                    <div>
-                        <input id="checkbox_regional" type="checkbox" checked>
-                        <label for="checkbox_regional">Regional</label>
-                    </div>
-                    <div>
-                        <input id="checkbox_gmax" type="checkbox" checked>
-                        <label for="checkbox_gmax">Gigantamax</label>
-                    </div>
-                    <div>
-                        <input id="checkbox_unique" type="checkbox" checked>
-                        <label for="checkbox_unique">Unique</label>
-                    </div>
-                </div>
-            </fieldset>
-
-            <fieldset>
-                <legend>Special kinds of Pokémon</legend>
-                <div class="grid">
-                    <div>
-                        <input id="checkbox_ordinary" type="checkbox" checked>
-                        <label for="checkbox_ordinary">Ordinary</label>
-                    </div>
-                    <div>
-                        <input id="checkbox_legendary" type="checkbox" checked>
-                        <label for="checkbox_legendary">Legendary</label>
-                    </div>
-                    <div>
-                        <input id="checkbox_baby" type="checkbox" checked>
-                        <label for="checkbox_baby">Baby</label>
-                    </div>
-                    <div>
-                        <input id="checkbox_mythical" type="checkbox" checked>
-                        <label for="checkbox_mythical">Mythical</label>
-                    </div>
-                </div>
-            </fieldset>
-
-            <fieldset>
-                <legend>Evolution chain (over all regional variants)</legend>
-                <label>(e.g. Mr. Mime counts as "Not fully evolved")</label>
-                <div class="grid">
-                    <div>
-                        <input id="checkbox_unevolved" type="checkbox" checked>
-                        <label for="checkbox_unevolved">Unevolved</label>
-                    </div>
-                    <div>
-                        <input id="checkbox_first_evo" type="checkbox" checked>
-                        <label for="checkbox_first_evo">1st evolution</label>
-                    </div>
-                    <div>
-                        <input id="checkbox_not_fully_evo" type="checkbox" checked>
-                        <label for="checkbox_not_fully_evo">Not fully evolved</label>
-                    </div>
-                    <div>
-                        <input id="checkbox_second_evo" type="checkbox" checked>
-                        <label for="checkbox_second_evo">2nd evolution</label>
-                    </div>
-                    <div>
-                        <input id="checkbox_fully_evo" type="checkbox" checked>
-                        <label for="checkbox_fully_evo">Fully evolved</label>
-                    </div>
-                </div>
-                <div class="row">
-                    <button id="button_all_evos">Select all</button>
-                    <button id="button_no_evos">Deselect all</button>
-                </div>
-            </fieldset>
-
-            <fieldset>
-                <legend>Pokemon types</legend>
-                <label>Number of Pokemon types:</label>
-                <div class="row">
-                    <input type="checkbox" id="checkbox_single_type" name="checkbox_n_types" checked>
-                    <label for="checkbox_single_type">Single type</label>
-                    <input type="checkbox" id="checkbox_dual_type" name="checkbox_n_types" checked>
-                    <label for="checkbox_dual_type">Dual type</label>
-                </div>
-                <label>Number of Pokemon types that must match:</label>
-                <div class="row">
-                    <input type="radio" id="radio_one_type" name="radio_n_matching_types" checked>
-                    <label for="radio_one_type">One</label>
-                    <input type="radio" id="radio_two_types" name="radio_n_matching_types">
-                    <label for="radio_two_types">Two</label>
-                </div>
-                <div id="type_grid" class="grid">
-                    <!-- Filled by JS -->
-                </div>
-                <div class="row">
-                    <button id="button_all_types">Select all</button>
-                    <button id="button_no_types">Deselect all</button>
-                </div>
-            </fieldset>
+            </div>
         </aside>
-        <main>
+        <main id="main">
             <button class="generage_button" onclick="generate()">
                 Generate!
             </button>
@@ -217,28 +226,35 @@
                 <!-- Filled by JS -->
             </div>
         </main>
-        <aside>
-            <h2>External resources</h2>
-            <ul>
-                <li>Game information</li>
+        <aside class="external_container">
+            <button id="button_external_panel" class="button_external_panel">Extern</button>
+            <div id="external_panel" class="external_panel">
+                <div class="panel_title_row">
+                    <h2>External resources</h2>
+                    <div></div>
+                    <button id="button_external_panel_close" class="button_external_panel hidden">X</button>
+                </div>
                 <ul>
-                    <li><a id="link_pokedex" target="_blank"><img class="logo" src="https://assets.pokemon.com/static2/_ui/img/favicon.ico"> Official Pokedex</a></li>
-                    <li><a id="link_bulba_wiki" target="_blank"><img class="logo" src="https://bulbapedia.bulbagarden.net/favicon.ico"> Bulbapedia</a></li>
-                    <li><a id="link_serebii" target="_blank"><img class="logo" src="https://www.serebii.net/favicon.ico"> Serebii</a></li>
-                    <li><a id="link_pokemondb" target="_blank"><img class="logo" src="pokemondb_icon.png"> Pokemondb</a></li>
+                    <li>Game information</li>
+                    <ul>
+                        <li><a id="link_pokedex" target="_blank"><img class="logo" src="https://assets.pokemon.com/static2/_ui/img/favicon.ico"> Official Pokedex</a></li>
+                        <li><a id="link_bulba_wiki" target="_blank"><img class="logo" src="https://bulbapedia.bulbagarden.net/favicon.ico"> Bulbapedia</a></li>
+                        <li><a id="link_serebii" target="_blank"><img class="logo" src="https://www.serebii.net/favicon.ico"> Serebii</a></li>
+                        <li><a id="link_pokemondb" target="_blank"><img class="logo" src="pokemondb_icon.png"> Pokemondb</a></li>
+                    </ul>
+                    <li>TCG information</li>
+                    <ul>
+                        <li><a id="link_serebii_tcg" target="_blank"><img class="logo" src="https://www.serebii.net/favicon.ico"> Serebii TCG database</a></li>
+                        <li><a id="link_bulba_tcg" target="_blank"><img class="logo" src="https://bulbapedia.bulbagarden.net/favicon.ico"> Bulbapedia Project TCG</a></li>
+                    </ul>
+                    <li>Media resources</li>
+                    <ul>
+                        <li><a id="link_bulba_archive" target="_blank"><img class="logo" src="https://archives.bulbagarden.net/favicon.ico"> Bulbapedia image archives</a></li>
+                        <li><a id="link_spriters_resource" target="_blank"><img class="logo" src="https://www.spriters-resource.com/resources/images/master/icon.png"> The Spriters Resource</a></li>
+                        <li><a id="link_models_resource" target="_blank"><img class="logo" src="https://www.models-resource.com/resources/images/master/icon.png"> The Models Resource</a></li>
+                    </ul>
                 </ul>
-                <li>TCG information</li>
-                <ul>
-                    <li><a id="link_serebii_tcg" target="_blank"><img class="logo" src="https://www.serebii.net/favicon.ico"> Serebii TCG database</a></li>
-                    <li><a id="link_bulba_tcg" target="_blank"><img class="logo" src="https://bulbapedia.bulbagarden.net/favicon.ico"> Bulbapedia Project TCG</a></li>
-                </ul>
-                <li>Media resources</li>
-                <ul>
-                    <li><a id="link_bulba_archive" target="_blank"><img class="logo" src="https://archives.bulbagarden.net/favicon.ico"> Bulbapedia image archives</a></li>
-                    <li><a id="link_spriters_resource" target="_blank"><img class="logo" src="https://www.spriters-resource.com/resources/images/master/icon.png"> The Spriters Resource</a></li>
-                    <li><a id="link_models_resource" target="_blank"><img class="logo" src="https://www.models-resource.com/resources/images/master/icon.png"> The Models Resource</a></li>
-                </ul>
-            </ul>
+            </div>
         </aside>
     </body>
 

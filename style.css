@@ -4,27 +4,98 @@
     --knob-padding: 0.2rem;
 	--knob-height: 2rem; /*(switch-height - 2*knob-padding)*/
 	--knob-dist: 2.8rem; /*(switch-width - knob-height - 2*knob-padding)*/
+
+	--panel-width: 25rem;
+	--button-panel-width: 3rem;
 }
 
 body {
-    display: flex;
-    flex-direction: row;
+	display: flex;
+	flex-direction: row;
     margin: 0;
+	text-wrap: nowrap;
 }
 
 main {
+	position: absolute;
+	left: var(--panel-width);
     display: flex;
     flex-direction: column;
+	max-width: calc(100vw - 2*var(--button-panel-width));
     text-align: center;
+	transition: 0.5s;
 }
 
 aside {
     display: flex;
     flex-direction: column;
-	align-items: start;
-    width: 20vw;
 	height: 100vh;
-	overflow: scroll;
+	min-width: var(--button-panel-width);
+}
+
+h2 {
+	margin: auto var(--button-panel-width);
+}
+
+.hidden {
+	display: none;
+}
+
+.panel_title_row {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	height: var(--button-panel-width);
+}
+
+.button_filter_panel {
+	width: var(--button-panel-width);
+	height: var(--button-panel-width);
+}
+
+.filter_panel {
+	position: absolute;
+	direction: rtl;
+	width: var(--panel-width);
+	height: 100vh;
+	overflow-x: hidden;
+	overflow-y: scroll;
+	background-color: #fff;
+	outline: 1px solid;
+	z-index: 1;
+	transition: 0.5s;
+}
+
+.ltr_container {
+	direction: ltr;
+	width: var(--panel-width);
+}
+
+.external_container {
+	position: absolute;
+	right: 0;
+}
+
+.button_external_panel {
+	width: var(--button-panel-width);
+	height: var(--button-panel-width);
+}
+
+.external_panel {
+	position: absolute;
+	right: 0;
+	width: var(--panel-width);
+	height: 100vh;
+	overflow-x: hidden;
+	overflow-y: scroll;
+	background-color: #fff;
+	outline: 1px solid;
+	z-index: 1;
+	transition: 0.5s;
+}
+
+.collapsed {
+	width: 0;
 }
 
 ul {

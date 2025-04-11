@@ -33,10 +33,6 @@ Based on
 
 Try extending json with filtering parameters
 
-~~Make sure filter pool is only updated when the filters have been changed~~
-
-Make sure it is handled when no pokemon match filters
-
 ### Form selection
 - ~~If forms are enabled, display a random one of them.~~
 - ~~Also show a list of all the alternative forms to choose from (selectable)~~
@@ -66,10 +62,11 @@ Make sure it is handled when no pokemon match filters
 
 ### Other todos
 - ~~Arceus and Silvally types are only in pokemon_v2_pokemonformtypes (except for normal)~~
-- Handle missing images
+- Handle when there are missing images
 - Dream World doesn't have shinies
 - ~~Link to other resources (Bulbapedia, Bulbapedia img archive, Pokemondb, Official Pokedex)~~
 - Maybe Home sprite for form list? Official is missing 27 Unown and Broken Mimikyu (look for more examples)
+- Do something about gender placeholder text and such
 - Edge cases
   - ~~Naming~~
     - ~~Zygarde add "%"~~

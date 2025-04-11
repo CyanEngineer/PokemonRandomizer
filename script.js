@@ -29,6 +29,10 @@ var validTypes;
 var pokemonNameList;
 
 // Filters elements
+const filter_panel = document.getElementById("filter_panel");
+const button_filter_panel = document.getElementById("button_filter_panel");
+const button_filter_panel_close = document.getElementById("button_filter_panel_close");
+
 const input_name = document.getElementById("input_name");
 const datalist_name = document.getElementById("datalist_name");
 
@@ -64,6 +68,7 @@ const button_all_types = document.getElementById("button_all_types");
 const button_no_types = document.getElementById("button_no_types");
 
 // Randomizer elements
+const main = document.getElementById("main");
 const pokemon_img_container = document.getElementById("pokemon_img_container");
 const pokemon_img = document.getElementById("pokemon_img");
 const pokemon_name = document.getElementById("pokemon_name");
@@ -78,6 +83,10 @@ const shiny_checkbox = document.getElementById("switch_checkbox_shiny");
 const shiny_chance = document.getElementById("shiny_chance");
 
 // External links elements
+const external_panel = document.getElementById("external_panel");
+const button_external_panel = document.getElementById("button_external_panel");
+const button_external_panel_close = document.getElementById("button_external_panel_close");
+
 const link_pokedex = document.getElementById("link_pokedex");
 const link_bulba_wiki = document.getElementById("link_bulba_wiki");
 const link_serebii = document.getElementById("link_serebii");
@@ -87,6 +96,13 @@ const link_bulba_tcg = document.getElementById("link_bulba_tcg");
 const link_bulba_archive = document.getElementById("link_bulba_archive");
 const link_spriters_resource = document.getElementById("link_spriters_resource");
 const link_models_resource = document.getElementById("link_models_resource");
+
+// CSS variables
+const pxPrRem = parseFloat(getComputedStyle(document.documentElement).fontSize);
+const style = window.getComputedStyle(document.body);
+const panelWidth = style.getPropertyValue("--panel-width");
+const buttonPanelWidth = style.getPropertyValue("--button-panel-width");
+
 
 const Genders = Object.freeze({
     FEMALE: 0,
@@ -976,6 +992,62 @@ function switchGender() {
 }
 
 // -------------------- Event handlers -------------------- //
+
+window.addEventListener("resize", handleResizeEvent);
+
+new ResizeObserver(handleResizeEvent).observe(pokemon_img_container);
+
+function handleResizeEvent() {
+    const hasRoomForBothPanels = window.innerWidth >= 2*pxPrRem*parseFloat(panelWidth) + main.clientWidth;
+    const hasRoomForOnePanel = window.innerWidth >= pxPrRem*(parseFloat(panelWidth) + parseFloat(buttonPanelWidth)) + main.clientWidth;
+    const filterClassList = filter_panel.classList;
+    const externalClassList = external_panel.classList;
+
+    if (hasRoomForBothPanels) {
+        filterClassList.remove("blade", "collapsed");
+        externalClassList.remove("blade", "collapsed");
+        button_filter_panel_close.classList.add("hidden");
+        button_external_panel_close.classList.add("hidden");
+    } else if (hasRoomForOnePanel) {
+        if (filterClassList.contains("blade")) {
+            main.style.left = panelWidth;
+        }
+        filterClassList.remove("blade", "collapsed");
+        button_filter_panel_close.classList.add("hidden");
+
+        if (!externalClassList.contains("blade")) {
+            externalClassList.add("blade", "collapsed");
+        }
+    } else {
+        if (!filterClassList.contains("blade")) {
+            filterClassList.add("blade", "collapsed");
+            main.style.left = buttonPanelWidth;
+        }
+        if (!externalClassList.contains("blade")) {
+            externalClassList.add("blade", "collapsed");
+        }
+    }
+}
+
+button_filter_panel.addEventListener("click", () => {
+    filter_panel.classList.remove("collapsed");
+    button_filter_panel_close.classList.remove("hidden");
+})
+
+button_external_panel.addEventListener("click", () => {
+    external_panel.classList.remove("collapsed");
+    button_external_panel_close.classList.remove("hidden");
+})
+
+button_filter_panel_close.addEventListener("click", () => {
+    filter_panel.classList.add("collapsed");
+    button_filter_panel_close.classList.add("hidden");
+})
+
+button_external_panel_close.addEventListener("click", () => {
+    external_panel.classList.add("collapsed");
+    button_external_panel_close.classList.add("hidden");
+})
 
 input_name.addEventListener("input", () => {
     hasFilterChanges = true;
