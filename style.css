@@ -5,8 +5,12 @@
 	--knob-height: 2rem; /*(switch-height - 2*knob-padding)*/
 	--knob-dist: 2.8rem; /*(switch-width - knob-height - 2*knob-padding)*/
 
+	--main-padding: 1rem;
 	--panel-width: 25rem;
 	--button-panel-width: 3rem;
+
+	--pokemon-img-default-dim: 475px;
+	--img-button-dim: 2rem;
 }
 
 body {
@@ -21,8 +25,9 @@ main {
 	left: var(--panel-width);
     display: flex;
     flex-direction: column;
-	max-width: calc(100vw - 2*var(--button-panel-width));
+	max-width: calc(100vw - 2*(var(--button-panel-width) + var(--main-padding)));
     text-align: center;
+	padding: 0 var(--main-padding);
 	transition: 0.5s;
 }
 
@@ -159,8 +164,8 @@ input[type="reset"] {
 	display: grid;
 	align-items: center;
 	justify-items: center;
-	height: 512px;
-	width: 512px;
+	height: var(--pokemon-img-default-dim);
+	width: var(--pokemon-img-default-dim);
 	resize: both;
 	overflow: hidden;
 	border: 1px solid gray;
@@ -189,8 +194,8 @@ input[type="reset"] {
 
 .img_button {
 	padding: 0;
-	height: 2rem;
-	width: 2rem;
+	height: var(--img-button-dim);
+	width: var(--img-button-dim);
 	display: grid;
 	align-items: center;
 	justify-items: center;
@@ -214,7 +219,10 @@ input[type="reset"] {
 
 .gender_shiny_container {
 	display: grid;
-	grid-template-columns: 1fr 1fr;
+	width: calc(var(--pokemon-img-default-dim) + var(--img-button-dim));
+	margin: auto;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	text-wrap: wrap;
 }
 
 .button_gender {

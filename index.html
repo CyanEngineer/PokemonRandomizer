@@ -21,8 +21,8 @@
                         <form>
                             Full/partial name: 
                             <span class="clearable_input">
-                                <input id=input_name list="datalist_name" type="text">
-                                <input type="reset" value="X">
+                                <input id="input_name" list="datalist_name" type="text">
+                                <input id="input_name_reset" type="reset" value="X">
                             </span>
                         </form>
                         <datalist id="datalist_name">
@@ -206,7 +206,7 @@
                 <div class="gender_container">
                     <h3>Gender</h3>
                     <button id="button_gender" class="button_gender" onclick="switchGender()"></button>
-                    <label id="label_gender">Placeholder text</label>
+                    <div><label id="label_gender"></label></div>
                 </div>
                 <div class="shiny_container">
                     <h3>Shiny</h3>
@@ -217,8 +217,10 @@
                     </div>
                     <div>
                         <label>Shiny chance:</label>
-                        <input type="number" id="shiny_chance" min="0" max="4096" value="1"/>
-                        <label>/4096</label>
+                        <div>
+                            <input type="number" id="shiny_chance" min="0" max="4096" value="1"/>
+                            <label>/4096</label>
+                        </div>
                     </div>
                 </div>
             </div>

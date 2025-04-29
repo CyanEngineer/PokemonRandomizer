@@ -98,10 +98,11 @@ const link_spriters_resource = document.getElementById("link_spriters_resource")
 const link_models_resource = document.getElementById("link_models_resource");
 
 // CSS variables
-const pxPrRem = parseFloat(getComputedStyle(document.documentElement).fontSize);
 const style = window.getComputedStyle(document.body);
+const pxPrRem = parseFloat(getComputedStyle(document.documentElement).fontSize);
 const panelWidth = style.getPropertyValue("--panel-width");
 const buttonPanelWidth = style.getPropertyValue("--button-panel-width");
+const pokemonImgDefaultDim = style.getPropertyValue("--pokemon-img-default-dim");
 
 
 const Genders = Object.freeze({
@@ -220,7 +221,7 @@ async function setup() {
         })
         .catch(error => {
             if (error instanceof TypeError && error.message.includes('NetworkError when attempting to fetch resource')) {
-                console.log("Unable to fetch resources from PokeAPI. Try reloading the page in a minute.");
+                console.log("Unable to fetch pokemon resources from PokeAPI. Try reloading the page in a minute.");
             }
         });
     
@@ -276,7 +277,7 @@ async function setup() {
         })
         .catch(error => {
             if (error instanceof TypeError && error.message.includes('NetworkError when attempting to fetch resource')) {
-                console.log("Unable to fetch resources from PokeAPI. Try reloading the page in a minute.");
+                console.log("Unable to fetch types resources from PokeAPI. Try reloading the page in a minute.");
             }
         });
 
@@ -780,7 +781,7 @@ function capitalizeFirstLetter(str) {
 }
 
 function setSprite() {
-    label_gender.innerHTML = "Placeholder text";
+    label_gender.innerHTML = "";
     const pokemonVariant = getVariant(currentFormIdx, currentVariantIdx);
 
     if (fetchSprite(pokemonVariant, "front_default", sprite_source_dropdown.value) == null) {
@@ -794,7 +795,7 @@ function setSprite() {
     
         if (!button_gender.disabled) {
             if (fetchSprite(pokemonVariant, currentGenderShiny + "_female", sprite_source_dropdown.value) == null) {
-                label_gender.innerHTML = "Sprite source only contains default gender";
+                label_gender.innerHTML = "Artwork source only\ncontains default gender";
             } else if (currentGender == Genders.FEMALE) {
                 currentGenderShiny += "_female";
             }
@@ -957,7 +958,7 @@ function setAlternateForms() {
             }
 
             const pokemonVariant = getVariant(formIdx, variantIdx);
-            form_img.src = pokemonVariant["pokemon_v2_pokemon"]["pokemon_v2_pokemonsprites"][0]["sprites"]["other"]["official-artwork"]["front_default"];
+            form_img.src = pokemonVariant["pokemon_v2_pokemon"]["pokemon_v2_pokemonsprites"][0]["sprites"]["other"]["home"]["front_default"];
             
             forms_container.appendChild(form_img);
         }
@@ -977,8 +978,8 @@ function fillView() {
 }
 
 function resetView() {
-    pokemon_img_container.style.height="512px";
-    pokemon_img_container.style.width="512px";
+    pokemon_img_container.style.height=pokemonImgDefaultDim;
+    pokemon_img_container.style.width=pokemonImgDefaultDim;
 }
 
 function switchGender() {
@@ -1004,6 +1005,9 @@ function handleResizeEvent() {
     const externalClassList = external_panel.classList;
 
     if (hasRoomForBothPanels) {
+        if (filterClassList.contains("blade")) {
+            main.style.left = panelWidth;
+        }
         filterClassList.remove("blade", "collapsed");
         externalClassList.remove("blade", "collapsed");
         button_filter_panel_close.classList.add("hidden");
@@ -1054,6 +1058,10 @@ input_name.addEventListener("input", () => {
     if (pokemonNameList.indexOf(input_name.value) > -1) {
         generate();
     }
+});
+
+input_name_reset.addEventListener("click", () => {
+    hasFilterChanges = true;
 });
 
 button_all_gens.addEventListener("click", () => {
@@ -1172,16 +1180,10 @@ button_no_evos.addEventListener("click", () => {
 
 checkbox_single_type.addEventListener("click", () => {
     hasFilterChanges = true;
-    if (!checkbox_single_type.checked && !checkbox_dual_type.checked) {
-        checkbox_dual_type.checked = true;
-    }
 });
 
 checkbox_dual_type.addEventListener("click", () => {
     hasFilterChanges = true;
-    if (!checkbox_dual_type.checked && !checkbox_single_type.checked) {
-        checkbox_single_type.checked = true;
-    }
 });
 
 radio_one_type.addEventListener("click", () => {
