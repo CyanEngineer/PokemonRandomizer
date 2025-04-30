@@ -49,7 +49,7 @@ Try extending json with filtering parameters
     - Then loop over each form of each dex when filtering
     - This will keep the list at 1025, while making the default variation equal to the others
 
-### Sprite selection
+### ~~Sprite selection~~
 - ~~Choose a sprite to display out of the sprites available in PokéAPI~~
   - ~~Choose a preferred sprite source~~
     - ~~Disable sprite sources without the sprite~~
@@ -64,6 +64,7 @@ Try extending json with filtering parameters
 - ~~Arceus and Silvally types are only in pokemon_v2_pokemonformtypes (except for normal)~~
 - Handle when there are missing images
 - Dream World doesn't have shinies
+- Automatic read artwork sources?
 - ~~Link to other resources (Bulbapedia, Bulbapedia img archive, Pokemondb, Official Pokedex)~~
 - ~~Maybe Home sprite for form list? Official is missing 27 Unown and Broken Mimikyu (look for more examples)~~
 - ~~Do something about gender placeholder text and such~~

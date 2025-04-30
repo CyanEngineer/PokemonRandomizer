@@ -5,6 +5,7 @@ var typesJson;
 // Current pokemon info
 var currentPokemon;
 var currentGender; // TODO: currentShiny ??
+var isCurrentShiny;
 var currentGenderShiny;
 var currentFormIdx;
 var currentVariantIdx;
@@ -78,8 +79,11 @@ const forms_container = document.getElementById("forms_container");
 const sprite_source_dropdown = document.getElementById("sprite_source_dropdown");
 
 const button_gender = document.getElementById("button_gender");
+const img_button_gender = document.getElementById("img_button_gender");
 const label_gender = document.getElementById("label_gender");
-const shiny_checkbox = document.getElementById("switch_checkbox_shiny");
+//const shiny_checkbox = document.getElementById("switch_checkbox_shiny");
+const button_shiny = document.getElementById("button_shiny");
+const img_button_shiny = document.getElementById("img_button_shiny");
 const shiny_chance = document.getElementById("shiny_chance");
 
 // External links elements
@@ -553,7 +557,7 @@ function generate() {
     console.log(currentPokemon);
 
     currentGender = decideGender();
-    shiny_checkbox.checked = decideShiny();
+    isCurrentShiny = decideShiny();
 
     setPokemon();
 }
@@ -726,11 +730,18 @@ function setPokemon(formIdx=-1, variantIdx=-1) {
     }
     currentVariantIdx = variantIdx;
 
-    button_gender.classList = ["button_gender"]
     if (currentGender == Genders.FEMALE) {
-        button_gender.classList.add("female");
+        img_button_gender.src = "female_icon.svg";
     } else if (currentGender == Genders.MALE) {
-        button_gender.classList.add("male");
+        img_button_gender.src = "male_icon.svg";
+    } else {
+        img_button_gender.src = "circle_icon.svg";
+    }
+
+    if (isCurrentShiny) {
+        img_button_shiny.src = "shiny_icon.png";
+    } else {
+        img_button_shiny.src = "circle_icon.svg";
     }
 
     if (getVariant(formIdx, variantIdx)["pokemon_v2_pokemon"]["pokemon_v2_pokemonsprites"][0]["sprites"]["front_female"] == null) {
@@ -789,7 +800,7 @@ function setSprite() {
     } else {
         currentGenderShiny = "front";
     
-        if (shiny_checkbox.checked) {
+        if (isCurrentShiny) {
             currentGenderShiny += "_shiny";
         }
     
@@ -980,16 +991,6 @@ function fillView() {
 function resetView() {
     pokemon_img_container.style.height=pokemonImgDefaultDim;
     pokemon_img_container.style.width=pokemonImgDefaultDim;
-}
-
-function switchGender() {
-    if (currentGender == Genders.FEMALE) {
-        currentGender = Genders.MALE;
-    } else if (currentGender == Genders.MALE) {
-        currentGender = Genders.FEMALE;
-    }
-
-    setPokemon(currentFormIdx, currentVariantIdx);
 }
 
 // -------------------- Event handlers -------------------- //
@@ -1224,6 +1225,18 @@ button_no_types.addEventListener("click", () => {
 
 sprite_source_dropdown.addEventListener("change", setSprite);
 
-shiny_checkbox.addEventListener("change", () => {
-    setSprite();
+button_gender.addEventListener("click", () => {
+    if (currentGender == Genders.FEMALE) {
+        currentGender = Genders.MALE;
+    } else if (currentGender == Genders.MALE) {
+        currentGender = Genders.FEMALE;
+    }
+
+    setPokemon(currentFormIdx, currentVariantIdx);
+});
+
+button_shiny.addEventListener("click", () => {
+    isCurrentShiny = !isCurrentShiny;
+
+    setPokemon(currentFormIdx, currentVariantIdx);
 });

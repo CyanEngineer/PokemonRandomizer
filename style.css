@@ -10,7 +10,8 @@
 	--button-panel-width: 3rem;
 
 	--pokemon-img-default-dim: 475px;
-	--img-button-dim: 2rem;
+	--img-button-dim: 2.5rem;
+	--img-button-img-dim: 1.5rem;
 }
 
 body {
@@ -194,11 +195,17 @@ input[type="reset"] {
 
 .img_button {
 	padding: 0;
+	margin: 0 auto;
 	height: var(--img-button-dim);
 	width: var(--img-button-dim);
 	display: grid;
 	align-items: center;
 	justify-items: center;
+
+	& img {
+		height: var(--img-button-img-dim);
+		width: var(--img-button-img-dim);
+	}
 }
 
 .clickable:hover {
@@ -224,174 +231,6 @@ input[type="reset"] {
 	grid-template-columns: repeat(2, minmax(0, 1fr));
 	text-wrap: wrap;
 }
-
-.button_gender {
-	width: 2.5rem;
-	height: 2.5rem;
-	padding-bottom: 0.3rem;
-	color: black;
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 2.3rem;
-	font-weight: bold;
-	line-height: 0.1;
-	border: 2px solid;
-	border-radius: 4px;
-
-	&::before {
-		content: "○";
-	}
-
-	&.female::before {
-		content: "♀";
-	}
-
-	&.male::before {
-		content: "♂";
-	}
-
-	&:disabled {
-		background-color: lightgray;
-	}
-
-	&:enabled {
-		cursor: pointer;
-
-		&.female {
-			background-color: #ff8888;
-			border-color: #f44336;
-
-			&:hover {
-				background-color: #e97a7a;
-			}
-
-			&:active {
-				font-size: 2rem;
-				background-color: #c76767;
-			}
-		}
-
-		&.male {
-			background-color: #00ffff;
-			border-color: #03a9f4;
-
-			&:hover {
-				background-color: #00e7e7;
-			}
-
-			&:active {
-				font-size: 2rem;
-				background-color: #00cfcf;
-			}
-		}
-	}
-}
-
-.switch {
-	position: relative;
-	width: var(--switch-width);
-	height: var(--switch-height);
-	border-radius: calc(var(--switch-height) / 2);
-	margin: auto;
-	overflow: hidden;
-}
-
-.switch_checkbox {
-	position: relative;
-	width: 100%;
-	height: 100%;
-	margin: 0;
-	opacity: 0;
-	cursor: pointer;
-	z-index: 3;
-}
-
-.switch_knob {
-	font-family: Arial, Helvetica, sans-serif;
-	position: absolute;
-	z-index: 2;
-	top: var(--knob-padding);
-	left: var(--knob-padding);
-	width: var(--knob-height);
-	height: var(--knob-height);
-	color: #fff;
-	font-size: 35px;
-	font-weight: bold;
-	text-align: center;
-	line-height: 0.82;
-	background-color: #f44336;
-	border-radius: 50%;
-	transition: 0.3s;
-
-	&.gender {
-		background-color: #f44336;
-		
-		&::before {
-			content: "♀";
-		}
-	}
-
-	&.shiny {
-		background-color: #a5a5a5;
-		
-		&::before {
-			content: "○";
-		}
-	}
-}
-
-.switch_bg {
-	position: absolute;
-	top: 0;
-	left: 0;
-	bottom: 0;
-	right: 0;
-	width: 100%;
-	transition: 0.3s;
-	z-index: 1;
-
-	&.gender {
-		background-color: #ff8888;
-	}
-
-	&.shiny {
-		background-color: #cccccc;
-	}
-}
-
-.switch_checkbox:checked {
-
-	+ .switch_knob {
-		left: calc(var(--switch-width) - var(--knob-height) - var(--knob-padding));
-
-		&.gender {
-			background-color: #03a9f4;
-
-			&::before {
-				content: "♂";
-			}
-		}
-
-		&.shiny {
-			background-color: #d0d000;
-
-			&::before {
-				content: "⋆";
-			}
-		}
-	}
-
-	~ .switch_bg {
-
-		&.gender {
-			background-color: #00ffff;
-		}
-
-		&.shiny {
-			background-color: #ffff00;
-		}
-  }
-}
-
 
 .form_img {
     max-width: auto;
