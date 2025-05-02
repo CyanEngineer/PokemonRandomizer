@@ -148,7 +148,7 @@
             </div>
         </aside>
         <main id="main">
-            <button class="generage_button" onclick="generate()">
+            <button class="generate_button" onclick="generate()">
                 Generate!
             </button>
             <div class="img_and_button_container">
@@ -215,18 +215,14 @@
                     <button id="button_shiny" class="img_button">
                         <img id="img_button_shiny" src="circle_icon.svg">
                     </button>
-                    <!--
-                    <div class="switch">
-                        <input type="checkbox" id="switch_checkbox_shiny" class="switch_checkbox shiny" />
-                        <div class="switch_knob shiny"></div>
-                        <div class="switch_bg shiny"></div>
-                    </div>
-                    -->
                     <div>
-                        <label>Shiny chance:</label>
-                        <div>
-                            <input type="number" id="shiny_chance" min="0" max="4096" value="1"/>
-                            <label>/4096</label>
+                        <div id="label_shiny" class="hidden"><label>Artwork source doesn't contain shiny artwork</label></div>
+                        <div id="shiny_chance_container">
+                            <label>Shiny chance:</label>
+                            <div>
+                                <input type="number" id="shiny_chance" min="0" max="4096" value="1"/>
+                                <label>/4096</label>
+                            </div>
                         </div>
                     </div>
                 </div>

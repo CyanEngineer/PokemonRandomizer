@@ -61,12 +61,15 @@ Try extending json with filtering parameters
 ### Linked list (history)?
 
 ### Other todos
+- Does Pokemon Showdown have both gender sprites? (Gloom)
 - ~~Arceus and Silvally types are only in pokemon_v2_pokemonformtypes (except for normal)~~
 - Handle when there are missing images
 - Dream World doesn't have shinies
 - Automatic read artwork sources?
 - ~~Link to other resources (Bulbapedia, Bulbapedia img archive, Pokemondb, Official Pokedex)~~
-- ~~Maybe Home sprite for form list? Official is missing 27 Unown and Broken Mimikyu (look for more examples)~~
+- Maybe Home sprite for form list? 
+  - Official is missing 27 Unown, Broken Mimikyu and more
+  - Home is missing Pikachu cosplays
 - ~~Do something about gender placeholder text and such~~
 - Edge cases
   - ~~Naming~~
@@ -138,6 +141,7 @@ Try extending json with filtering parameters
   - Furfrou
   - Vivillon
   - Alcremie
+  - Mimikyu
   - PokeAPI Zygarde 10 (it exists in power construct)
 - Bad sprites
   - Showdown Hisuian Electrode

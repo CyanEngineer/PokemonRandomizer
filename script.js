@@ -81,8 +81,10 @@ const sprite_source_dropdown = document.getElementById("sprite_source_dropdown")
 const button_gender = document.getElementById("button_gender");
 const img_button_gender = document.getElementById("img_button_gender");
 const label_gender = document.getElementById("label_gender");
-//const shiny_checkbox = document.getElementById("switch_checkbox_shiny");
+
 const button_shiny = document.getElementById("button_shiny");
+const shiny_chance_container = document.getElementById("shiny_chance_container");
+const label_shiny = document.getElementById("label_shiny");
 const img_button_shiny = document.getElementById("img_button_shiny");
 const shiny_chance = document.getElementById("shiny_chance");
 
@@ -744,12 +746,6 @@ function setPokemon(formIdx=-1, variantIdx=-1) {
         img_button_shiny.src = "circle_icon.svg";
     }
 
-    if (getVariant(formIdx, variantIdx)["pokemon_v2_pokemon"]["pokemon_v2_pokemonsprites"][0]["sprites"]["front_female"] == null) {
-        button_gender.disabled = true;
-    } else {
-        button_gender.disabled = false;
-    }
-
     setSprite();
 
     checkSpriteSources();
@@ -795,18 +791,35 @@ function setSprite() {
     label_gender.innerHTML = "";
     const pokemonVariant = getVariant(currentFormIdx, currentVariantIdx);
 
+    if (getVariant(currentFormIdx, currentVariantIdx)["pokemon_v2_pokemon"]["pokemon_v2_pokemonsprites"][0]["sprites"]["front_female"] == null) {
+        button_gender.disabled = true;
+    } else {
+        button_gender.disabled = false;
+    }
+
     if (fetchSprite(pokemonVariant, "front_default", sprite_source_dropdown.value) == null) {
         pokemon_img.src = "No artwork.png"
     } else {
         currentGenderShiny = "front";
     
-        if (isCurrentShiny) {
-            currentGenderShiny += "_shiny";
+        if(["other dream_world", "versions generation-i red-blue", "versions generation-i yellow"].includes(sprite_source_dropdown.value)) {
+            shiny_chance_container.classList.add("hidden");
+            label_shiny.classList.remove("hidden");
+        } else {
+            shiny_chance_container.classList.remove("hidden");
+            label_shiny.classList.add("hidden");
+
+            if (isCurrentShiny) {
+                currentGenderShiny += "_shiny";
+            }
         }
     
         if (!button_gender.disabled) {
-            if (fetchSprite(pokemonVariant, currentGenderShiny + "_female", sprite_source_dropdown.value) == null) {
-                label_gender.innerHTML = "Artwork source only\ncontains default gender";
+            if ((fetchSprite(pokemonVariant, currentGenderShiny + "_female", sprite_source_dropdown.value) == null) ||
+            ["versions generation-i red-blue", "versions generation-i yellow", "versions generation-ii gold", "versions generation-ii silver",
+                "versions generation-ii crystal", "versions generation-iii ruby-sapphire", "versions generation-iii firered-leafgreen",
+                "versions generation-iii emerald"].includes(sprite_source_dropdown.value)) {
+                label_gender.innerHTML = "Artwork source only contains default gender";
             } else if (currentGender == Genders.FEMALE) {
                 currentGenderShiny += "_female";
             }

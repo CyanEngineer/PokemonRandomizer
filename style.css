@@ -226,6 +226,7 @@ input[type="reset"] {
 
 .gender_shiny_container {
 	display: grid;
+	height: 10rem;
 	width: calc(var(--pokemon-img-default-dim) + var(--img-button-dim));
 	margin: auto;
 	grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -246,5 +247,6 @@ input[type="reset"] {
     display: flex;
     flex-direction: row;
     height:6rem;
+	max-width: calc(100vw - 2*(var(--panel-width) + var(--main-padding)));
     overflow: scroll;
 }
