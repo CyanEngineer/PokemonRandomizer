@@ -64,7 +64,7 @@ Try extending json with filtering parameters
 - Does Pokemon Showdown have both gender sprites? (Gloom)
 - ~~Arceus and Silvally types are only in pokemon_v2_pokemonformtypes (except for normal)~~
 - Handle when there are missing images
-- Dream World doesn't have shinies
+- ~~Dream World doesn't have shinies~~
 - Automatic read artwork sources?
 - ~~Link to other resources (Bulbapedia, Bulbapedia img archive, Pokemondb, Official Pokedex)~~
 - Maybe Home sprite for form list? 
@@ -124,7 +124,8 @@ Try extending json with filtering parameters
   - PokeAPI Mega Venusaur shouldn't have female sprite
   - Official Zen Darmanitan???
   - PokeAPI Shiny Zygarde 50
-  - There are fan sprites in Black White
+  - There are fan sprites in Black White for later gens
+  - Pokemon Showdown Gloom male has female sprite
   - Many missing 
 - Missing sprites
   - Deerling + Sawsbuck
@@ -149,5 +150,5 @@ Try extending json with filtering parameters
   - Types are only in pokemon_v2_pokemonformtypes (except normal)
     - Could we, like, always put the type in formtype, regardless of it being extraordinary or not?
     - Arceus form order is not the same as the general type order
-  - Missing Dream World sprites (Silvally - not sure about Arceus)
-  - All alternate forms use standard sprite
+  - Silvally missing Dream World sprites
+  - All alternative forms use standard sprite

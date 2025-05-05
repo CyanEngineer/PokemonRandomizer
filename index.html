@@ -18,7 +18,7 @@
                     </div>
                     <fieldset>
                         <legend>Pokemon name</legend>
-                        <form>
+                        <form onkeydown="if(event.keyCode === 13) {return false;}">
                             Full/partial name: 
                             <span class="clearable_input">
                                 <input id="input_name" list="datalist_name" type="text">
